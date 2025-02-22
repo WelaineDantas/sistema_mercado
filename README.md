@@ -1,7 +1,52 @@
-# Entregável Parcial 3 (EP3) - sistema_mercado
+# Entregável Parcial 1 (EP1) - sistema_mercado
 
-EP3 como requisito parcial para aprovação na disciplina de Projeto Integrado 2, 
+EP1 como requisito parcial para aprovação na disciplina de Projeto Integrado 3, 
 do curso de Análise e Desenvolvimento de Sistemas, da Universidade Federal do Cariri.
+
+# Brand guide - Manual de Identidade Visual:
+<img src="/sistema_mercado/screenshots/manualIdentidadeVisual.png" height="300px"/>
+
+# Screenshots:
+Login:
+<img src="/sistema_mercado/screenshots/login/login.png" height="400px"/> 
+<img src="/sistema_mercado/screenshots/login/cadastrar.png" height="400px"/>
+<img src="/sistema_mercado/screenshots/login/recuperarSenha.png" height="400px"/>
+<img src="/sistema_mercado/screenshots/login/confirmarRecuperacao.png" height="400px"/>
+
+Tela principal (Estoque/produtos)
+<img src="/sistema_mercado/screenshots/inventory/stock/estoque.png" height="400px"/>
+<img src="/sistema_mercado/screenshots/inventory/stock/editarProduto.png" height="400px"/>
+<img src="/sistema_mercado/screenshots/inventory/stock/produtoEditadoSucesso.png" height="400px"/>
+<img src="/sistema_mercado/screenshots/inventory/stock/desejaExcluir.png" height="400px"/>
+<img src="/sistema_mercado/screenshots/inventory/stock/excluidoSucesso.png" height="400px"/>
+
+Estoque/reposição
+<img src="/sistema_mercado/screenshots/inventory/restocking/reposicao.png" height="400px"/>
+<img src="/sistema_mercado/screenshots/inventory/restocking/novaReposicao.png" height="400px"/>
+<img src="/sistema_mercado/screenshots/inventory/restocking/novaReposicaoSucesso.png" height="400px"/>
+
+Fornecedores
+<img src="/sistema_mercado/screenshots/suppliers/fornecedores.png" height="400px"/>
+<img src="/sistema_mercado/screenshots/suppliers/editarFornecedores.png" height="400px"/>
+<img src="/sistema_mercado/screenshots/suppliers/fornecedorEditadoSucesso.png" height="400px"/>
+<img src="/sistema_mercado/screenshots/suppliers/exclusaoFornecedor.png" height="400px"/>
+<img src="/sistema_mercado/screenshots/suppliers/fornecedorExclusaoSucesso.png" height="400px"/>
+
+Usuários
+<img src="/sistema_mercado/screenshots/users/usuarios.png" height="400px"/>
+<img src="/sistema_mercado/screenshots/users/editarUsuario.png" height="400px"/>
+<img src="/sistema_mercado/screenshots/users/usuarioEditadoSucesso.png" height="400px"/>
+<img src="/sistema_mercado/screenshots/users/usuarioExclusao.png" height="400px"/>
+<img src="/sistema_mercado/screenshots/users/usuarioExclusaoSucesso.png" height="400px"/>
+
+Cadastros
+<img src="/sistema_mercado/screenshots/registration/supplier/fornecedor.png" height="400px"/>
+<img src="/sistema_mercado/screenshots/registration/supplier/sucessoFornecedor.png" height="400px"/>
+<img src="/sistema_mercado/screenshots/registration/product/produto.png" height="400px"/>
+<img src="/sistema_mercado/screenshots/registration/product/sucessoProduto.png" height="400px"/>
+<img src="/sistema_mercado/screenshots/registration/user/usuario.png" height="400px"/>
+<img src="/sistema_mercado/screenshots/registration/user/sucessoUsuario.png" height="400px"/>
+
 
 Docente: Prof. Dr. Allysson Allex de Paula Araújo
 
