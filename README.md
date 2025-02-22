@@ -4,11 +4,11 @@ EP1 como requisito parcial para aprovação na disciplina de Projeto Integrado 3
 do curso de Análise e Desenvolvimento de Sistemas, da Universidade Federal do Cariri.
 
 # Brand guide - Manual de Identidade Visual:
-<img src="/sistema_mercado/screenshots/manualIdentidadeVisual.png" height="300px"/>
+<img src="/screenshots/manualIdentidadeVisual.png" height="300px"/>
 
 # Screenshots:
 Login:
-<img src="/sistema_mercado/screenshots/login/login.png" height="400px"/> 
+<img src="./sistema_mercado/screenshots/login/login.png" height="400px"/> 
 <img src="/sistema_mercado/screenshots/login/cadastrar.png" height="400px"/>
 <img src="/sistema_mercado/screenshots/login/recuperarSenha.png" height="400px"/>
 <img src="/sistema_mercado/screenshots/login/confirmarRecuperacao.png" height="400px"/>
