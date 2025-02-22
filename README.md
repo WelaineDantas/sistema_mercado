@@ -7,7 +7,7 @@ do curso de Análise e Desenvolvimento de Sistemas, da Universidade Federal do C
 <img src="/screenshots/manualIdentidadeVisual.png" height="300px"/>
 
 # Screenshots:
-Login:
+Login
 <img src="/screenshots/login/login.png" height="250px"/> 
 <img src="/screenshots/login/cadastrar.png" height="250px"/>
 <img src="/screenshots/login/recuperarSenha.png" height="250px"/>
