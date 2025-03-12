@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sistema de Estoque - Cadastros</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<script src="script.js"></script>
+<body>
+    <div class="container">
+        <div class="sidebar">
+            <div class="sidebar-header">
+                <h2>SISTEMA DE<br>ESTOQUE</h2>
+            </div>
+            <nav class="sidebar-nav">
+                <div class="sidebar-item">
+                    <div class="sidebar-icon icon-estoque"></div>
+                    <span>Estoque</span>
+                    <span class="dropdown-icon">▼</span>
+                </div>
+                <div class="sidebar-item">
+                    <div class="sidebar-icon icon-fornecedores"></div>
+                    <span>Fornecedores</span>
+                    <span class="dropdown-icon">▼</span>
+                </div>
+                <div class="sidebar-item">
+                    <div class="sidebar-icon icon-usuarios"></div>
+                    <span>Usuários</span>
+                    <span class="dropdown-icon">▼</span>
+                </div>
+                <div class="sidebar-item active">
+                    <div class="sidebar-icon icon-cadastro"></div>
+                    <span>Cadastros</span>
+                    <span class="dropdown-icon">▼</span>
+                </div>
+                <div class="sidebar-subnav">
+                    <div class="sidebar-subitem">Fornecedor</div>
+                    <div class="sidebar-subitem">Produto</div>
+                    <div class="sidebar-subitem">Usuário</div>
+                </div>
+            </nav>
+            <div class="sidebar-footer">
+                <div>Oi, Leonardo</div>
+                <div class="logout-icon"></div>
+            </div>
+        </div>
+
+        <div class="content">
+            <div class="content-header">
+                <h1>Cadastrar</h1>
+                <a href="fornecedores.html" class="link-back">Ir para Fornecedores →</a>
+            </div>
+
+            <div class="form-container">
+                <div class="form-group">
+                    <label for="cadastroRazaoSocial">Razão Social</label>
+                    <input type="text" id="cadastroRazaoSocial">
+                </div>
+                
+                <div class="form-group">
+                    <label for="cadastroCNPJ">CNPJ</label>
+                    <input type="text" id="cadastroCNPJ">
+                </div>
+                
+                <div class="form-group">
+                    <label for="cadastroTelefone">Telefone</label>
+                    <input type="text" id="cadastroTelefone">
+                </div>
+                
+                <div class="form-buttons">
+                    <button class="btn btn-salvar" id="btnSalvarCadastro">SALVAR</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal de sucesso -->
+    <div class="modal" id="successCadastroModal">
+        <div class="modal-content">
+            <div class="success-icon"></div>
+            <h2>Cadastro realizado com sucesso!</h2>
+            <button class="btn btn-confirmar" id="btnCadastroSuccessOk">Ok</button>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>

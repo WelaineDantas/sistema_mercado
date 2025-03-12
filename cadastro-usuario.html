@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sistema de Estoque - Cadastro de Usuário</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container">
+        <div class="sidebar">
+            <div class="sidebar-header">
+                <h2>SISTEMA DE<br>ESTOQUE</h2>
+            </div>
+            <nav class="sidebar-nav">
+                <div class="sidebar-item">
+                    <div class="sidebar-icon icon-estoque"></div>
+                    <span>Estoque</span>
+                    <span class="dropdown-icon">▼</span>
+                </div>
+                <div class="sidebar-item">
+                    <div class="sidebar-icon icon-fornecedores"></div>
+                    <span>Fornecedores</span>
+                    <span class="dropdown-icon">▼</span>
+                </div>
+                <div class="sidebar-item">
+                    <div class="sidebar-icon icon-usuarios"></div>
+                    <span>Usuários</span>
+                    <span class="dropdown-icon">▼</span>
+                </div>
+                <div class="sidebar-item active">
+                    <div class="sidebar-icon icon-cadastro"></div>
+                    <span>Cadastros</span>
+                    <span class="dropdown-icon">▼</span>
+                </div>
+                <div class="sidebar-subnav">
+                    <div class="sidebar-subitem">Fornecedor</div>
+                    <div class="sidebar-subitem">Produto</div>
+                    <div class="sidebar-subitem active">Usuário</div>
+                </div>
+            </nav>
+            <div class="sidebar-footer">
+                <div>Oi, Leonardo</div>
+                <div class="logout-icon"></div>
+            </div>
+        </div>
+
+        <div class="content">
+            <div class="content-header">
+                <h1>Cadastrar novo Usuário</h1>
+                <a href="usuarios.html" class="link-back">Ir para Usuários →</a>
+            </div>
+
+            <div class="form-container">
+                <div class="form-group">
+                    <label for="nomeUsuario">Nome</label>
+                    <input type="text" id="nomeUsuario">
+                </div>
+                
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="cpfUsuario">CPF</label>
+                        <input type="text" id="cpfUsuario">
+                    </div>
+                    <div class="form-group">
+                        <label for="emailUsuario">Email</label>
+                        <input type="email" id="emailUsuario">
+                    </div>
+                    <div class="form-group">
+                        <label for="funcaoUsuario">Função</label>
+                        <input type="text" id="funcaoUsuario">
+                    </div>
+                </div>
+                
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Status</label>
+                        <div class="radio-group">
+                            <label>
+                                <input type="radio" name="statusCadastroUsuario" value="ativo" checked> Ativo
+                            </label>
+                            <label>
+                                <input type="radio" name="statusCadastroUsuario" value="inativo"> Inativo
+                            </label>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="senhaUsuario">Senha</label>
+                        <input type="password" id="senhaUsuario">
+                    </div>
+                </div>
+                
+                <div class="form-buttons">
+                    <button class="btn btn-salvar" id="btnSalvarUsuarioCadastro">SALVAR</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal de sucesso -->
+    <div class="modal" id="successUsuarioCadastroModal">
+        <div class="modal-content">
+            <div class="success-icon"></div>
+            <h2>Cadastro realizado com sucesso!</h2>
+            <button class="btn btn-confirmar" id="btnUsuarioCadastroSuccessOk">Ok</button>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>

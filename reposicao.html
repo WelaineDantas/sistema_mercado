@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sistema de Estoque - Reposição</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container">
+        <div class="sidebar">
+            <div class="sidebar-header">
+                <h2>SISTEMA DE<br>ESTOQUE</h2>
+            </div>
+            <nav class="sidebar-nav">
+                <div class="sidebar-item active">
+                    <div class="sidebar-icon icon-estoque"></div>
+                    <span>Estoque</span>
+                    <span class="dropdown-icon">▼</span>
+                </div>
+                <div class="sidebar-subnav">
+                    <div class="sidebar-subitem">Produtos</div>
+                    <div class="sidebar-subitem active">Reposição</div>
+                </div>
+                <div class="sidebar-item">
+                    <div class="sidebar-icon icon-fornecedores"></div>
+                    <span>Fornecedores</span>
+                    <span class="dropdown-icon">▼</span>
+                </div>
+                <div class="sidebar-item">
+                    <div class="sidebar-icon icon-usuarios"></div>
+                    <span>Usuários</span>
+                    <span class="dropdown-icon">▼</span>
+                </div>
+                <div class="sidebar-item">
+                    <div class="sidebar-icon icon-cadastro"></div>
+                    <span>Cadastro</span>
+                    <span class="dropdown-icon">▼</span>
+                </div>
+            </nav>
+            <div class="sidebar-footer">
+                <div>Oi, Leonardo</div>
+                <div class="logout-icon"></div>
+            </div>
+        </div>
+
+        <div class="content">
+            <div class="content-header">
+                <h1>Reposição de Estoque</h1>
+                <a href="estoque.html" class="link-back">Ir para Estoque →</a>
+            </div>
+
+            <div class="form-container">
+                <div class="form-group">
+                    <label for="produto">Produto</label>
+                    <input type="text" id="produto">
+                </div>
+                
+                <div class="form-group">
+                    <label for="codigoBarra">Código de barra</label>
+                    <input type="text" id="codigoBarra">
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="dataRecebimento">Data de recebimento</label>
+                        <input type="date" id="dataRecebimento">
+                    </div>
+                    <div class="form-group">
+                        <label for="dataSaida">Data de saída</label>
+                        <input type="date" id="dataSaida">
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <label for="deposito">Depósito</label>
+                    <input type="text" id="deposito">
+                </div>
+                
+                <div class="form-group">
+                    <label for="quantidade">Quantidade em estoque</label>
+                    <input type="number" id="quantidade">
+                </div>
+                
+                <div class="form-buttons">
+                    <button class="btn btn-finalizar" id="btnFinalizar">Finalizar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal de sucesso -->
+    <div class="modal" id="successModal">
+        <div class="modal-content">
+            <div class="success-icon"></div>
+            <h2>Reposição realizada com sucesso!</h2>
+            <button class="btn btn-confirmar" id="btnSuccessOk">Ok</button>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
