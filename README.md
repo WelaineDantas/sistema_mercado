@@ -56,6 +56,5 @@ FRANCISCO JEFERSON DA SILVA DANTAS<br>
 MARIA WELAINE DANTAS ANGELO<br>
 PAULO GONÇALO FARIAS GONÇALVES<br>
 
-Link para a documentação (Desenvolvido na disciplina de Projeto Integrado 3): 
-https://docs.google.com/document/d/1XnManf0GeQmoH-7xjKG8H61UVQLQfCRmYvtl8CksFHA/edit 
+
 
