@@ -3,6 +3,10 @@
 EP1 como requisito parcial para aprovação na disciplina de Projeto Integrado 3, 
 do curso de Análise e Desenvolvimento de Sistemas, da Universidade Federal do Cariri.
 
+Para logar entrar com:
+E-mail: adm@adm.com
+Senha: admin123
+
 # Brand guide - Manual de Identidade Visual:
 <img src="/screenshots/manualIdentidadeVisual.png" height="300px"/>
 
