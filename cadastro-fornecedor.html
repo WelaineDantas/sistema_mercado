@@ -6,8 +6,9 @@
     <title>Sistema de Estoque - Cadastros</title>
     <link rel="stylesheet" href="style.css">
 </head>
-<script src="script.js"></script>
 <body>
+    <script src="script.js" defer></script>
+
     <div class="container">
         <div id="menu-container"></div>   
 
@@ -17,26 +18,29 @@
                 <a href="fornecedores.html" class="link-back">Ir para Fornecedores →</a>
             </div>
 
-            <div class="form-container">
-                <div class="form-group">
-                    <label for="cadastroRazaoSocial">Razão Social</label>
-                    <input type="text" id="cadastroRazaoSocial">
+            <!-- 🔥 Adicionamos um id no form -->
+            <form id="cadastroFornecedorForm">
+                <div class="form-container">
+                    <div class="form-group">
+                        <label for="cadastroRazaoSocial">Razão Social</label>
+                        <input type="text" id="cadastroRazaoSocial" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="cadastroCNPJ">CNPJ</label>
+                        <input type="text" id="cadastroCNPJ" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="cadastroTelefone">Telefone</label>
+                        <input type="text" id="cadastroTelefone" required>
+                    </div>
+                    
+                    <div class="form-buttons">
+                        <button type="submit" class="btn btn-salvar">SALVAR</button>
+                    </div>
                 </div>
-                
-                <div class="form-group">
-                    <label for="cadastroCNPJ">CNPJ</label>
-                    <input type="text" id="cadastroCNPJ">
-                </div>
-                
-                <div class="form-group">
-                    <label for="cadastroTelefone">Telefone</label>
-                    <input type="text" id="cadastroTelefone">
-                </div>
-                
-                <div class="form-buttons">
-                    <button class="btn btn-salvar" id="btnSalvarCadastro">SALVAR</button>
-                </div>
-            </div>
+            </form>
         </div>
     </div>
 
@@ -45,10 +49,51 @@
         <div class="modal-content">
             <div class="success-icon"></div>
             <h2>Cadastro realizado com sucesso!</h2>
+            <br>
             <button class="btn btn-confirmar" id="btnCadastroSuccessOk">Ok</button>
         </div>
     </div>
 
-    <script src="script.js"></script>
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            const form = document.getElementById("cadastroFornecedorForm");
+            const modal = document.getElementById("successCadastroModal");
+
+            form.addEventListener("submit", function (event) {
+                event.preventDefault(); // 🔥 Impede o reload da página
+
+                let fornecedores = JSON.parse(localStorage.getItem("fornecedores")) || [];
+
+                let novoFornecedor = {
+                    razaoSocial: document.getElementById("cadastroRazaoSocial").value.trim(),
+                    cnpj: document.getElementById("cadastroCNPJ").value.trim(),
+                    telefone: document.getElementById("cadastroTelefone").value.trim()
+                };
+
+                // 🔥 Verifica se os campos estão preenchidos
+                if (!novoFornecedor.razaoSocial || !novoFornecedor.cnpj || !novoFornecedor.telefone) {
+                    alert("Preencha todos os campos antes de salvar.");
+                    return;
+                }
+
+                fornecedores.push(novoFornecedor);
+                localStorage.setItem("fornecedores", JSON.stringify(fornecedores));
+
+                // 🔥 Exibe o modal de sucesso
+                modal.style.display = "flex";
+
+                // 🔥 Aguarda 1.5s e redireciona para a lista de fornecedores
+                setTimeout(() => {
+                    window.location.href = "fornecedores.html";
+                }, 1500);
+            });
+
+            // Fecha o modal ao clicar no botão "Ok"
+            document.getElementById("btnCadastroSuccessOk").addEventListener("click", function () {
+                modal.style.display = "none";
+                window.location.href = "fornecedores.html";
+            });
+        });
+    </script>
 </body>
 </html>
