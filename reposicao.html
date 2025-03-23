@@ -6,50 +6,60 @@
     <title>Sistema de Estoque - Reposição</title>
     <link rel="stylesheet" href="style.css">
 </head>
-<script src="script.js"></script>
 <body>
+    <script src="script.js" defer></script>
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            carregarProdutosNaReposicao();
+
+            function carregarProdutosNaReposicao() {
+                let produtos = JSON.parse(localStorage.getItem("produtos")) || [];
+                let tabela = document.getElementById("estoqueLista");
+
+                if (!tabela) return;
+
+                tabela.innerHTML = ""; // Limpa a tabela antes de inserir novos produtos
+
+                if (produtos.length === 0) {
+                    tabela.innerHTML = "<p style='text-align: center; margin-top: 10px;'>Nenhum produto cadastrado.</p>";
+                    return;
+                }
+
+                produtos.forEach((produto, index) => {
+                    let row = document.createElement("div");
+                    row.classList.add("table-row");
+                    row.innerHTML = `
+                        <div class="row-main">
+                            <div class="col-item">${produto.descricao || produto.nome}</div>
+                            <div class="col-quantidade">${produto.quantidade}</div>
+                            <div class="col-local">${produto.local || "Não especificado"}</div>
+                            <div class="col-acoes">
+                                <button class="btn-icon btn-repor" data-id="${index}" onclick="window.location.href='nova-reposicao.html?produto=${encodeURIComponent(produto.nome)}'">Repor</button>
+                            </div>
+                        </div>
+                    `;
+                    tabela.appendChild(row);
+                });
+            }
+        });
+    </script>
     <div class="container">
-        <div id="menu-container"></div> 
+        <div id="menu-container"></div>               
         <div class="content">
             <div class="content-header">
                 <h1>Reposição de Estoque</h1>
-                <a href="estoque.html" class="link-back">Ir para Estoque →</a>
+                <button class="btn btn-add" id="btnAddItem">Novo Produto</button>
             </div>
 
-            <div class="form-container">
-                <div class="form-group">
-                    <label for="produto">Produto</label>
-                    <input type="text" id="produto">
+            <div class="content-table">
+                <div class="table-header">
+                    <div class="col-item">Item</div>
+                    <div class="col-quantidade">Quantidade</div>
+                    <div class="col-local">Local</div>
+                    <div class="col-acoes">Ações</div>
                 </div>
-                
-                <div class="form-group">
-                    <label for="codigoBarra">Código de barra</label>
-                    <input type="text" id="codigoBarra">
-                </div>
-
-                <div class="form-row">
-                    <div class="form-group">
-                        <label for="dataRecebimento">Data de recebimento</label>
-                        <input type="date" id="dataRecebimento">
-                    </div>
-                    <div class="form-group">
-                        <label for="dataSaida">Data de saída</label>
-                        <input type="date" id="dataSaida">
-                    </div>
-                </div>
-                
-                <div class="form-group">
-                    <label for="deposito">Depósito</label>
-                    <input type="text" id="deposito">
-                </div>
-                
-                <div class="form-group">
-                    <label for="quantidade">Quantidade em estoque</label>
-                    <input type="number" id="quantidade">
-                </div>
-                
-                <div class="form-buttons">
-                    <button class="btn btn-finalizar" id="btnFinalizar">Finalizar</button>
+                <div class="content-table" id="estoqueLista">
+                    <!-- Os produtos cadastrados serão inseridos aqui dinamicamente -->
                 </div>
             </div>
         </div>
@@ -59,11 +69,9 @@
     <div class="modal" id="successModal">
         <div class="modal-content">
             <div class="success-icon"></div>
-            <h2>Reposição realizada com sucesso!</h2>
+            <h2 id="successMessage">Reposição realizada com sucesso!</h2>
             <button class="btn btn-confirmar" id="btnSuccessOk">Ok</button>
         </div>
     </div>
-
-    <script src="script.js"></script>
 </body>
 </html>

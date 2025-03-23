@@ -45,7 +45,24 @@ document.addEventListener('DOMContentLoaded', function() {
 
     // Verifica se está na página de cadastro de produto
     if (document.getElementById('btnSalvarProduto')) {
-        initCadastroProdutoPage();
+        document.getElementById("btnSalvarProduto").addEventListener("click", function () {
+            let descricao = document.getElementById("descricao").value;
+            let quantidade = document.getElementById("quantidadeProduto").value;
+            let local = document.getElementById("localProduto").value;
+            let precoVenda = document.getElementById("precoVenda").value;
+    
+            if (!descricao || !quantidade || !local || !precoVenda) {
+                alert("Preencha todos os campos obrigatórios!");
+                return;
+            }
+    
+            let produtos = JSON.parse(localStorage.getItem("produtos")) || [];
+            produtos.push({ nome: descricao, quantidade, local, precoVenda });
+            localStorage.setItem("produtos", JSON.stringify(produtos));
+    
+            // Redireciona para a tela de estoque
+            window.location.href = "estoque.html";
+        });
     }
 
     // Verifica se está na página de cadastro de usuário
@@ -222,6 +239,7 @@ function applyMenuState() {
 
 function toggleSubMenu(menuId) {
     let menu = document.getElementById(menuId);
+    localStorage.removeItem("activeMenu");
     let parentItem = menu.previousElementSibling;
 
     if (menu.classList.contains("open")) {
@@ -268,10 +286,147 @@ function setActiveMenu(page, element) {
     localStorage.setItem('activeMenu', element.textContent.trim());
 
     localStorage.removeItem("activeSubItem");
+    localStorage.removeItem("openMenu");
 
      // Navega para a página
      setTimeout(() => { window.location.href = page; }, 100); // 🔥 Pequeno atraso para garantir a atualização
 }
+
+document.addEventListener("DOMContentLoaded", function () {
+    let produtos = JSON.parse(localStorage.getItem("produtos")) || [];
+
+    // Renderiza os produtos salvos no localStorage
+    function renderizarProdutos() {
+        const tabela = document.querySelector(".content-table");
+        tabela.innerHTML = `
+            <div class="table-header">
+                <div class="col-item">Item</div>
+                <div class="col-quantidade">Quantidade</div>
+                <div class="col-local">Local</div>
+                <div class="col-acoes">Ações</div>
+            </div>
+        `;
+
+        produtos.forEach((produto, index) => {
+            const row = document.createElement("div");
+            row.classList.add("table-row");
+            row.innerHTML = `
+                <div class="row-main">
+                    <div class="col-item">${produto.nome}</div>
+                    <div class="col-quantidade">${produto.quantidade}</div>
+                    <div class="col-local">${produto.local}</div>
+                    <div class="col-acoes">
+                        <button class="btn-icon btn-edit" data-id="${index}">Editar</button>
+                        <button class="btn-icon btn-delete" data-id="${index}">Excluir</button>
+                    </div>
+                </div>
+            `;
+            tabela.appendChild(row);
+        });
+
+        adicionarEventos();
+    }
+
+    // Abre o modal de edição e carrega os dados do produto
+    function abrirModalEdicao(index) {
+        const produto = produtos[index];
+        document.getElementById("editNome").value = produto.nome;
+        document.getElementById("editLocal").value = produto.local;
+        document.getElementById("editPrecoVenda").value = produto.precoVenda;
+        document.getElementById("btnSalvarEdit").setAttribute("data-id", index);
+        document.getElementById("editModal").style.display = "flex";
+    }
+
+    // Salva as edições do produto
+    document.getElementById("btnSalvarEdit").addEventListener("click", function () {
+        setTimeout(() => {
+            successModal.style.display = "flex"; // Exibe o modal de sucesso
+        }, 200);
+        const index = this.getAttribute("data-id");
+        produtos[index].nome = document.getElementById("editNome").value;
+        produtos[index].local = document.getElementById("editLocal").value;
+        produtos[index].precoVenda = document.getElementById("editPrecoVenda").value;
+
+        localStorage.setItem("produtos", JSON.stringify(produtos));
+        renderizarProdutos();
+        document.getElementById("editModal").style.display = "none";
+    });
+
+    btnSuccessOk.addEventListener("click", function () {
+        successModal.style.display = "none"; // Fecha o modal ao clicar no botão OK
+    });
+
+    // Abre o modal de exclusão
+    function abrirModalExclusao(index) {
+        document.getElementById("btnConfirmDelete").setAttribute("data-id", index);
+        document.getElementById("deleteModal").style.display = "flex";
+    }
+
+    // Confirma a exclusão do produto
+    document.getElementById("btnConfirmDelete").addEventListener("click", function () {
+        const index = this.getAttribute("data-id");
+        produtos.splice(index, 1);
+        localStorage.setItem("produtos", JSON.stringify(produtos));
+        renderizarProdutos();
+        document.getElementById("deleteModal").style.display = "none";
+    });
+
+    // Fecha os modais ao cancelar ou clicar fora
+    document.querySelectorAll(".modal").forEach(modal => {
+        modal.addEventListener("click", function (e) {
+            if (e.target.classList.contains("modal")) {
+                modal.style.display = "none";
+            }
+        });
+    });
+
+    document.getElementById("btnCancelDelete").addEventListener("click", function () {
+        document.getElementById("deleteModal").style.display = "none";
+    });
+
+    document.getElementById("closeEditModal").addEventListener("click", function () {
+        document.getElementById("editModal").style.display = "none";
+    });
+
+    // Adiciona eventos de clique em botões de edição/exclusão
+    function adicionarEventos() {
+        document.querySelectorAll(".btn-edit").forEach(button => {
+            button.addEventListener("click", function () {
+                abrirModalEdicao(this.getAttribute("data-id"));
+            });
+        });
+
+        document.querySelectorAll(".btn-delete").forEach(button => {
+            button.addEventListener("click", function () {
+                abrirModalExclusao(this.getAttribute("data-id"));
+            });
+        });
+    }
+
+    // Adiciona novo item ao estoque
+    document.getElementById("btnAddItem").addEventListener("click", function () {
+        // Define apenas o menu "Cadastros" como ativo
+        localStorage.setItem("openMenu", "submenu-cadastros");
+
+        // Remove a seleção de "Usuário" e "Fornecedor"
+        localStorage.removeItem("activeMenu");
+
+        //const novoProduto = {
+          //  nome: "Novo Produto",
+            //quantidade: 0,
+            //local: "Depósito",
+            //precoVenda: "0,00"
+        //};
+        window.location.href = "cadastro-produto.html";
+
+        //produtos.push(novoProduto);
+        //localStorage.setItem("produtos", JSON.stringify(produtos));
+        //renderizarProdutos();
+    });
+
+    renderizarProdutos();
+});
+
 
 
 function setActiveAndNavigate(page, element, menuId) {
@@ -283,6 +438,8 @@ function setActiveAndNavigate(page, element, menuId) {
 
     // Adiciona 'active' apenas ao item clicado
     element.classList.add("active");
+    
+
 
     let menu = document.getElementById(menuId);
     if (menu) {
@@ -377,12 +534,129 @@ function setActiveAndNavigate(page, element, menuId) {
 
 // Expandir submenu ao carregar a página
 document.addEventListener('DOMContentLoaded', function() {
-    let savedMenu = localStorage.getItem('openMenu');
-    if (savedMenu) {
-        let menu = document.getElementById(savedMenu);
+    let openMenu = localStorage.getItem('openMenu');
+    if (openMenu) {
+        let menu = document.getElementById(openMenu);
         if (menu) {
-            menu.style.display = 'block';
-            menu.classList.add('open');
+            menu.classList.add("open");
+            menu.style.display = "block";
+            
+            let parentItem = menu.previousElementSibling;
+            if (parentItem) {
+                parentItem.classList.add("open");
+            }
         }
     }
 });
+
+document.addEventListener("DOMContentLoaded", function () {
+    renderizarProdutos();
+    if (document.getElementById("estoqueLista")) {
+        carregarProdutosNaReposicao();
+    }
+
+    function carregarProdutosNaReposicao() {
+        let produtos = JSON.parse(localStorage.getItem("produtos")) || [];
+        let tabela = document.getElementById("estoqueLista");
+
+        if (!tabela) return;
+
+        tabela.innerHTML = ""; // Limpa a tabela antes de inserir novos produtos
+
+        if (produtos.length === 0) {
+            tabela.innerHTML = "<p style='text-align: center; margin-top: 10px;'>Nenhum produto cadastrado.</p>";
+            return;
+        }
+
+        produtos.forEach((produto, index) => {
+            let row = document.createElement("div");
+            row.classList.add("table-row");
+            row.innerHTML = `
+                <div class="row-main">
+                    <div class="col-item">${produto.descricao || produto.nome}</div>
+                    <div class="col-quantidade">${produto.quantidade}</div>
+                    <div class="col-local">${produto.local || "Não especificado"}</div>
+                    <div class="col-acoes">
+                        <button class="btn-icon btn-repor" data-id="${index}">Repor</button>
+                    </div>
+                </div>
+            `;
+            tabela.appendChild(row);
+        });
+
+        adicionarEventosDeReposicao();
+    }
+
+    function adicionarEventosDeReposicao() {
+        document.querySelectorAll(".btn-repor").forEach(button => {
+            button.addEventListener("click", function () {
+                let index = this.getAttribute("data-id");
+                let produtos = JSON.parse(localStorage.getItem("produtos")) || [];
+
+                let novaQuantidade = prompt(`Digite a quantidade a repor para ${produtos[index].descricao || produtos[index].nome}:`);
+                if (novaQuantidade && !isNaN(novaQuantidade) && novaQuantidade > 0) {
+                    produtos[index].quantidade = parseInt(produtos[index].quantidade) + parseInt(novaQuantidade);
+                    localStorage.setItem("produtos", JSON.stringify(produtos));
+                    carregarProdutosNaReposicao();
+
+                    // Exibir modal de sucesso
+                    document.getElementById("successModal").style.display = "flex";
+                }
+            });
+        });
+
+        // Fecha o modal de sucesso ao clicar no botão "OK"
+        document.getElementById("btnSuccessOk").addEventListener("click", function () {
+            document.getElementById("successModal").style.display = "none";
+        });
+    }
+});
+
+document.addEventListener("DOMContentLoaded", function () {
+    // Pega o parâmetro 'produto' da URL
+    const urlParams = new URLSearchParams(window.location.search);
+    const produtoNome = urlParams.get("produto");
+
+    // Se houver um produto na URL, preenche o campo automaticamente
+    if (produtoNome) {
+        document.getElementById("produto").value = produtoNome;
+    }
+
+    // Evento de finalização da reposição
+    document.getElementById("btnFinalizar").addEventListener("click", function () {
+        const produto = document.getElementById("produto").value;
+        const codigoBarra = document.getElementById("codigoBarra").value;
+        const dataRecebimento = document.getElementById("dataRecebimento").value;
+        const dataSaida = document.getElementById("dataSaida").value;
+        const deposito = document.getElementById("deposito").value;
+        const quantidade = document.getElementById("quantidade").value;
+
+        if (!produto || !quantidade) {
+            alert("Preencha os campos obrigatórios.");
+            return;
+        }
+
+        // Atualiza a quantidade no estoque (localStorage)
+        let produtos = JSON.parse(localStorage.getItem("produtos")) || [];
+        let produtoIndex = produtos.findIndex(p => p.nome === produto);
+
+        if (produtoIndex !== -1) {
+            produtos[produtoIndex].quantidade = parseInt(produtos[produtoIndex].quantidade) + parseInt(quantidade);
+            localStorage.setItem("produtos", JSON.stringify(produtos));
+        }
+
+        // Exibir modal de sucesso
+        document.getElementById("successModal").style.display = "flex";
+    });
+
+    // Fecha o modal e volta para a tela de reposição
+    document.getElementById("btnSuccessOk").addEventListener("click", function () {
+        document.getElementById("successModal").style.display = "none";
+        window.location.href = "reposicao.html";
+    });
+});
+
+
+
+
+

@@ -169,9 +169,10 @@ body {
     color: white !important;
 }
 
-.sidebar-subitem.active {
+.sidebar-subnav.open .sidebar-subitem.active {
     font-weight: bold !important;
-    opacity: 0.8 !important;
+    opacity: 1 !important;
+    color: #363F4D !important;
 }
 
 .sidebar-footer {
@@ -424,6 +425,7 @@ body {
     max-width: 500px;
     width: 90%;
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    justify-content: center;
 }
 
 .modal-header {
