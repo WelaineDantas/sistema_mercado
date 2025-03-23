@@ -1,6 +1,6 @@
-# Entregável Parcial 1 (EP1) - sistema_mercado
+# Projeto Web- Sistema de Estoque de Supermercado
 
-EP1 como requisito parcial para aprovação na disciplina de Projeto Integrado 3, 
+Atividade como requisito parcial para aprovação na disciplina de Desenvolvimento para Web, 
 do curso de Análise e Desenvolvimento de Sistemas, da Universidade Federal do Cariri.
 
 # Brand guide - Manual de Identidade Visual:
@@ -48,8 +48,7 @@ Cadastros<br>
 <img src="/screenshots/registration/user/sucessoUsuario.png" height="300px"/>
 
 
-Docente: Prof. Dr. Allysson Allex de Paula Araújo
-
+Docente: Prof. Dr. Ricardo Ferreira Vilela
 
 Criado por:
 DARLAN ALMEIDA BARROSO<br>
@@ -57,6 +56,6 @@ FRANCISCO JEFERSON DA SILVA DANTAS<br>
 MARIA WELAINE DANTAS ANGELO<br>
 PAULO GONÇALO FARIAS GONÇALVES<br>
 
-Link para a documentação: 
+Link para a documentação (Desenvolvido na disciplina de Projeto Integrado 3): 
 https://docs.google.com/document/d/1XnManf0GeQmoH-7xjKG8H61UVQLQfCRmYvtl8CksFHA/edit 
 
