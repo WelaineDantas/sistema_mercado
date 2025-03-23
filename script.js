@@ -1,8 +1,21 @@
 // Verifica qual página está sendo carregada
 document.addEventListener('DOMContentLoaded', function() {
+    fetch("menu.html")
+        .then(response => response.text())
+        .then(data => {
+            document.getElementById("menu-container").innerHTML = data;
+        })
+        .then(() => {
+            applyMenuState();
+        });
     // Verifica se está na página de login
     if (document.getElementById('btnEntrar')) {
-        initLoginPage();
+        initLoginAndRecoverPage();
+    }
+
+    // Verifica se está na página de Recuperar
+    if (document.getElementById('btnConfirmar')) {
+        initLoginAndRecoverPage();
     }
 
     // Verifica se está na página de estoque
@@ -41,8 +54,8 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 });
 
-// Funções para página de login
-function initLoginPage() {
+// Funções para página de login e recuperar senha
+function initLoginAndRecoverPage() {
     const recoverLink = document.getElementById('recoverLink');
     const btnCadastrar = document.getElementById('btnCadastrar');
     const btnEntrar = document.getElementById('btnEntrar');
@@ -50,17 +63,12 @@ function initLoginPage() {
     const btnReturn = document.getElementById('btnReturn');
     const returnLogin = document.getElementById('returnLogin');
     const recoverModal = document.getElementById('recoverModal');
+    const cadastrarModal = document.getElementById('cadastrarModal');
     const confirmModal = document.getElementById('confirmModal');
     const emailInput = document.getElementById('email');
     const passwordInput = document.getElementById('password');
     const cpfInput = document.getElementById('cpf');
-
-    if (recoverLink) {
-        recoverLink.addEventListener('click', function(event) {
-            event.preventDefault();
-            recoverModal.style.display = 'flex';
-        });
-    }
+    const closeCadastrarModal = document.getElementById("closeCadastrarModal");
 
     if (returnLogin) {
         returnLogin.addEventListener('click', function(event) {
@@ -71,7 +79,7 @@ function initLoginPage() {
 
     if (btnReturn) {
         btnReturn.addEventListener('click', function() {
-            confirmModal.style.display = 'none';
+            window.location.href = "index.html";
         });
     }
 
@@ -82,8 +90,12 @@ function initLoginPage() {
                 return;
             }
 
-            recoverModal.style.display = 'none';
-            confirmModal.style.display = 'flex';
+            if (recoverModal) recoverModal.style.display = "none";
+            if (cadastrarModal) cadastrarModal.style.display = "none";
+
+            // Exibe o modal de confirmação
+            if (confirmModal) confirmModal.style.display = "flex";
+            
 
             if (cpfInput) {
                 cpfInput.value = '';
@@ -111,10 +123,36 @@ function initLoginPage() {
     }
 
     if (btnCadastrar) {
-        btnCadastrar.addEventListener('click', function() {
-            alert('Redirecionando para página de cadastro...');
-            // Em um sistema real, isso seria:
-            // window.location.href = 'cadastro-usuario.html';
+        btnCadastrar.addEventListener('click', function(event) {
+            event.preventDefault();
+            cadastrarModal.style.display = 'flex';
+        });
+    }
+
+    if (closeCadastrarModal && cadastrarModal) {
+        closeCadastrarModal.addEventListener("click", function () {
+            cadastrarModal.style.display = "none"; // Fecha o modal
+        });
+    }
+
+    if (btnSalvarUsuarioCadastro) {
+        btnSalvarUsuarioCadastro.addEventListener("click", function () {
+            // Captura os campos do formulário
+            const nome = document.getElementById("nomeUsuario").value.trim();
+            const cpf = document.getElementById("cpfUsuario").value.trim();
+            const email = document.getElementById("emailUsuario").value.trim();
+            const senha = document.getElementById("senhaUsuario").value.trim();
+            const funcao = document.getElementById("funcaoUsuario").value.trim();
+
+            // Verifica se algum campo está vazio
+            if (!nome || !cpf || !email || !senha || !funcao) {
+                alert("Por favor, preencha todos os campos");
+                return;
+            }
+
+            // Se todos os campos estiverem preenchidos, pode prosseguir
+            alert("Cadastro realizado com sucesso!");
+            cadastrarModal.style.display = "none";
         });
     }
 
@@ -126,6 +164,9 @@ function initLoginPage() {
         if (event.target === confirmModal) {
             confirmModal.style.display = 'none';
         }
+        if (event.target === cadastrarModal) {
+            cadastrarModal.style.display = 'none';
+        }
     });
 
     // Permitir fechar modais com a tecla Esc
@@ -133,652 +174,215 @@ function initLoginPage() {
         if (event.key === 'Escape') {
             if (recoverModal) recoverModal.style.display = 'none';
             if (confirmModal) confirmModal.style.display = 'none';
+            if(cadastrarModal) cadastrarModal.style.display = 'none';
         }
     });
 }
 
-// Funções para página de estoque
-function initEstoquePage() {
-    const btnAddItem = document.getElementById('btnAddItem');
-    const editButtons = document.querySelectorAll('.btn-edit');
-    const deleteButtons = document.querySelectorAll('.btn-delete');
-    const closeEditModal = document.getElementById('closeEditModal');
-    const btnSalvarEdit = document.getElementById('btnSalvarEdit');
-    const btnConfirmDelete = document.getElementById('btnConfirmDelete');
-    const btnCancelDelete = document.getElementById('btnCancelDelete');
-    const btnSuccessOk = document.getElementById('btnSuccessOk');
-    const editModal = document.getElementById('editModal');
-    const deleteModal = document.getElementById('deleteModal');
-    const successModal = document.getElementById('successModal');
-    const successMessage = document.getElementById('successMessage');
+function applyMenuState() {
+    let savedMenu = localStorage.getItem("openMenu");
+    let activeSubItem = localStorage.getItem("activeSubItem");
+    let activeMenu = localStorage.getItem("activeMenu");
+    if (savedMenu) {
+        let menu = document.getElementById(savedMenu);
+        if (menu) {
+            menu.style.display = "block";
+            menu.classList.add("open");
 
-    // Variável para armazenar o ID do item a ser excluído
-    let itemToDelete = null;
-
-    if (btnAddItem) {
-        btnAddItem.addEventListener('click', function() {
-            window.location.href = 'cadastro-produto.html';
-        });
-    }
-
-    // Adicionar eventos aos botões de edição
-    editButtons.forEach(button => {
-        button.addEventListener('click', function() {
-            const itemId = this.dataset.id;
-            // Em um sistema real, buscaríamos as informações do item no servidor
-            // Simulando preenchimento dos campos de edição
-            document.getElementById('editNome').value = 'Produto ' + itemId;
-            document.getElementById('editLocal').value = 'Depósito 2';
-            document.getElementById('editPrecoVenda').value = 'R$ 000,00';
-
-            editModal.style.display = 'flex';
-        });
-    });
-
-    // Adicionar eventos aos botões de exclusão
-    deleteButtons.forEach(button => {
-        button.addEventListener('click', function() {
-            itemToDelete = this.dataset.id;
-            deleteModal.style.display = 'flex';
-        });
-    });
-
-    // Fechar modal de edição
-    if (closeEditModal) {
-        closeEditModal.addEventListener('click', function() {
-            editModal.style.display = 'none';
-        });
-    }
-
-    // Salvar edição
-    if (btnSalvarEdit) {
-        btnSalvarEdit.addEventListener('click', function() {
-            // Em um sistema real, enviaríamos os dados para o servidor
-            editModal.style.display = 'none';
-            successMessage.textContent = 'Produto editado com sucesso!';
-            successModal.style.display = 'flex';
-        });
-    }
-
-    // Confirmar exclusão
-    if (btnConfirmDelete) {
-        btnConfirmDelete.addEventListener('click', function() {
-            // Em um sistema real, enviaríamos a solicitação de exclusão para o servidor
-            deleteModal.style.display = 'none';
-            successMessage.textContent = 'Exclusão realizada com sucesso!';
-            successModal.style.display = 'flex';
-        });
-    }
-
-    // Cancelar exclusão
-    if (btnCancelDelete) {
-        btnCancelDelete.addEventListener('click', function() {
-            deleteModal.style.display = 'none';
-            itemToDelete = null;
-        });
-    }
-
-    // Fechar modal de sucesso
-    if (btnSuccessOk) {
-        btnSuccessOk.addEventListener('click', function() {
-            successModal.style.display = 'none';
-            // Em um sistema real, recarregaríamos os dados ou redirecionaríamos
-            // Simulando atualização da página
-            alert("A tabela seria atualizada em um sistema real.");
-        });
-    }
-
-    // Fechar modais quando clicar fora deles
-    window.addEventListener('click', function(event) {
-        if (event.target === editModal) {
-            editModal.style.display = 'none';
-        }
-        if (event.target === deleteModal) {
-            deleteModal.style.display = 'none';
-            itemToDelete = null;
-        }
-        if (event.target === successModal) {
-            successModal.style.display = 'none';
-        }
-    });
-
-    // Permitir fechar modais com a tecla Esc
-    document.addEventListener('keydown', function(event) {
-        if (event.key === 'Escape') {
-            if (editModal) editModal.style.display = 'none';
-            if (deleteModal) {
-                deleteModal.style.display = 'none';
-                itemToDelete = null;
-            }
-            if (successModal) successModal.style.display = 'none';
-        }
-    });
-}
-
-// Funções para página de reposição
-function initReposicaoPage() {
-    const btnFinalizar = document.getElementById('btnFinalizar');
-    const successModal = document.getElementById('successModal');
-    const btnSuccessOk = document.getElementById('btnSuccessOk');
-
-    if (btnFinalizar) {
-        btnFinalizar.addEventListener('click', function() {
-            // Validação simples
-            const produto = document.getElementById('produto').value.trim();
-            const codigoBarra = document.getElementById('codigoBarra').value.trim();
-            const deposito = document.getElementById('deposito').value.trim();
-            const quantidade = document.getElementById('quantidade').value.trim();
-
-            if (!produto || !codigoBarra || !deposito || !quantidade) {
-                alert('Por favor, preencha todos os campos obrigatórios.');
-                return;
+            // Garante que o item pai do submenu também tenha a classe 'open'
+            let parentItem = menu.previousElementSibling;
+            if (parentItem && parentItem.classList.contains("sidebar-item")) {
+                parentItem.classList.add("open");
             }
 
-            // Em um sistema real, enviaríamos os dados para o servidor
-            successModal.style.display = 'flex';
-        });
-    }
-
-    if (btnSuccessOk) {
-        btnSuccessOk.addEventListener('click', function() {
-            successModal.style.display = 'none';
-            // Limpar formulário
-            document.querySelectorAll('input').forEach(input => {
-                input.value = '';
-            });
-        });
-    }
-
-    // Fechar modais quando clicar fora deles
-    window.addEventListener('click', function(event) {
-        if (event.target === successModal) {
-            successModal.style.display = 'none';
         }
-    });
-
-    // Permitir fechar modais com a tecla Esc
-    document.addEventListener('keydown', function(event) {
-        if (event.key === 'Escape') {
-            if (successModal) successModal.style.display = 'none';
-        }
-    });
-}
-
-// Funções para página de usuários
-function initUsuariosPage() {
-    const btnAddUsuario = document.getElementById('btnAddUsuario');
-    const editButtons = document.querySelectorAll('.btn-edit');
-    const deleteButtons = document.querySelectorAll('.btn-danger');
-    const closeEditUsuarioModal = document.getElementById('closeEditUsuarioModal');
-    const closeAddUsuarioModal = document.getElementById('closeAddUsuarioModal');
-    const btnSalvarUsuario = document.getElementById('btnSalvarUsuario');
-    const btnCadastrarUsuario = document.getElementById('btnCadastrarUsuario');
-    const btnConfirmDeleteUsuario = document.getElementById('btnConfirmDeleteUsuario');
-    const btnCancelDeleteUsuario = document.getElementById('btnCancelDeleteUsuario');
-    const btnUsuarioSuccessOk = document.getElementById('btnUsuarioSuccessOk');
-    const editUsuarioModal = document.getElementById('editUsuarioModal');
-    const addUsuarioModal = document.getElementById('addUsuarioModal');
-    const deleteUsuarioModal = document.getElementById('deleteUsuarioModal');
-    const successUsuarioModal = document.getElementById('successUsuarioModal');
-    const successUsuarioMessage = document.getElementById('successUsuarioMessage');
-
-    // Variável para armazenar o ID do usuário a ser excluído
-    let userToDelete = null;
-
-    if (btnAddUsuario) {
-        btnAddUsuario.addEventListener('click', function() {
-            addUsuarioModal.style.display = 'flex';
-        });
     }
 
-    // Adicionar eventos aos botões de edição
-    editButtons.forEach(button => {
-        button.addEventListener('click', function() {
-            const userId = this.dataset.id;
-            // Em um sistema real, buscaríamos as informações do usuário no servidor
-            // Simulando preenchimento dos campos de edição
-            document.getElementById('editNomeUsuario').value = 'Usuário ' + userId;
-            document.getElementById('editFuncao').value = 'Estoquista';
-            document.getElementById('editEmail').value = 'usuario' + userId + '@sistema.com';
-            document.getElementById('editSenha').value = '';
-
-            editUsuarioModal.style.display = 'flex';
-        });
-    });
-
-    // Adicionar eventos aos botões de exclusão
-    deleteButtons.forEach(button => {
-        button.addEventListener('click', function() {
-            userToDelete = this.dataset.id;
-            deleteUsuarioModal.style.display = 'flex';
-        });
-    });
-
-    // Fechar modal de edição
-    if (closeEditUsuarioModal) {
-        closeEditUsuarioModal.addEventListener('click', function() {
-            editUsuarioModal.style.display = 'none';
-        });
-    }
-
-    // Fechar modal de adição
-    if (closeAddUsuarioModal) {
-        closeAddUsuarioModal.addEventListener('click', function() {
-            addUsuarioModal.style.display = 'none';
-        });
-    }
-
-    // Salvar edição
-    if (btnSalvarUsuario) {
-        btnSalvarUsuario.addEventListener('click', function() {
-            // Em um sistema real, enviaríamos os dados para o servidor
-            editUsuarioModal.style.display = 'none';
-            successUsuarioMessage.textContent = 'Usuário editado com sucesso!';
-            successUsuarioModal.style.display = 'flex';
-        });
-    }
-
-    // Cadastrar novo usuário
-    if (btnCadastrarUsuario) {
-        btnCadastrarUsuario.addEventListener('click', function() {
-            // Em um sistema real, enviaríamos os dados para o servidor
-            addUsuarioModal.style.display = 'none';
-            successUsuarioMessage.textContent = 'Usuário cadastrado com sucesso!';
-            successUsuarioModal.style.display = 'flex';
-        });
-    }
-
-    // Confirmar exclusão
-    if (btnConfirmDeleteUsuario) {
-        btnConfirmDeleteUsuario.addEventListener('click', function() {
-            // Em um sistema real, enviaríamos a solicitação de exclusão para o servidor
-            deleteUsuarioModal.style.display = 'none';
-            successUsuarioMessage.textContent = 'Exclusão realizada com sucesso!';
-            successUsuarioModal.style.display = 'flex';
-        });
-    }
-
-    // Cancelar exclusão
-    if (btnCancelDeleteUsuario) {
-        btnCancelDeleteUsuario.addEventListener('click', function() {
-            deleteUsuarioModal.style.display = 'none';
-            userToDelete = null;
-        });
-    }
-
-    // Fechar modal de sucesso
-    if (btnUsuarioSuccessOk) {
-        btnUsuarioSuccessOk.addEventListener('click', function() {
-            successUsuarioModal.style.display = 'none';
-            // Em um sistema real, recarregaríamos os dados ou redirecionaríamos
-        });
-    }
-
-    // Fechar modais quando clicar fora deles
-    window.addEventListener('click', function(event) {
-        if (event.target === editUsuarioModal) {
-            editUsuarioModal.style.display = 'none';
-        }
-        if (event.target === addUsuarioModal) {
-            addUsuarioModal.style.display = 'none';
-        }
-        if (event.target === deleteUsuarioModal) {
-            deleteUsuarioModal.style.display = 'none';
-            userToDelete = null;
-        }
-        if (event.target === successUsuarioModal) {
-            successUsuarioModal.style.display = 'none';
-        }
-    });
-
-    // Permitir fechar modais com a tecla Esc
-    document.addEventListener('keydown', function(event) {
-        if (event.key === 'Escape') {
-            if (editUsuarioModal) editUsuarioModal.style.display = 'none';
-            if (addUsuarioModal) addUsuarioModal.style.display = 'none';
-            if (deleteUsuarioModal) {
-                deleteUsuarioModal.style.display = 'none';
-                userToDelete = null;
+     // Recupera o item ativo do submenu
+     if (activeSubItem) {
+        document.querySelectorAll('.sidebar-subitem').forEach(item => {
+            if (item.textContent.trim() === activeSubItem) {
+                item.classList.add('active');
             }
-            if (successUsuarioModal) successUsuarioModal.style.display = 'none';
+        });
+    }
+
+    // Mantém a cor do menu ativo (Fornecedor)
+    if (activeMenu) {
+        document.querySelectorAll('.sidebar-item').forEach(item => {
+            if (item.textContent.trim() === activeMenu) {
+                item.classList.add('active');
+            } else {
+                item.classList.remove('active'); // 🔥 Garante que os outros menus voltem à cor original
+            }
+        });
+    }
+}
+
+
+function toggleSubMenu(menuId) {
+    let menu = document.getElementById(menuId);
+    let parentItem = menu.previousElementSibling;
+
+    if (menu.classList.contains("open")) {
+        menu.classList.remove("open");
+        menu.style.display = "none";
+
+        if (parentItem) {
+            parentItem.classList.remove("open");
+        }
+        localStorage.removeItem("openMenu");
+    } else {
+        // Fecha todos os outros submenus antes de abrir este
+        document.querySelectorAll('.sidebar-subnav').forEach(sub => {
+            sub.classList.remove("open");
+            sub.style.display = "none";
+        });
+        document.querySelectorAll('.sidebar-item').forEach(item => {
+            item.classList.remove("open");
+        });
+
+        menu.classList.add("open");
+        menu.style.display = "block";
+
+        if (parentItem) {
+            parentItem.classList.add("open"); // 🔥 Aqui garantimos que o Estoque receba a cor imediatamente
+        }
+        localStorage.setItem("openMenu", menuId);
+    }
+}
+
+
+function navigateTo(page) {
+    window.location.href = page;
+}
+
+function setActiveMenu(page, element) {
+    // Remove 'active' de todos os itens principais do menu
+    document.querySelectorAll('.sidebar-item').forEach(item => item.classList.remove('active'));
+
+    // Adiciona 'active' ao item clicado
+    element.classList.add('active');
+
+    // Salva no localStorage para manter após recarregar
+    localStorage.setItem('activeMenu', element.textContent.trim());
+
+    localStorage.removeItem("activeSubItem");
+
+     // Navega para a página
+     setTimeout(() => { window.location.href = page; }, 100); // 🔥 Pequeno atraso para garantir a atualização
+}
+
+
+function setActiveAndNavigate(page, element, menuId) {
+    localStorage.setItem("openMenu", menuId);
+    localStorage.setItem('activeSubItem', element.textContent.trim()); // Salva o nome do item clicado
+
+    // Remove 'active' de todos os itens
+    document.querySelectorAll(".sidebar-subitem").forEach(item => item.classList.remove("active"));
+
+    // Adiciona 'active' apenas ao item clicado
+    element.classList.add("active");
+
+    let menu = document.getElementById(menuId);
+    if (menu) {
+        menu.style.display = 'block';
+        menu.classList.add('open');
+
+         // Garante que o item principal (Estoque) mantenha a cor de fundo
+         let parentItem = menu.previousElementSibling;
+         if (parentItem && parentItem.classList.contains("sidebar-item")) {
+             parentItem.classList.add("open");
+         }
+    }
+
+    // Navega para a página
+    window.location.href = page;
+}
+
+// Seleção de elementos centralizada
+const elements = {
+    btnSalvarUsuarioCadastro: document.getElementById('btnSalvarUsuarioCadastro'),
+    successUsuarioCadastroModal: document.getElementById('successUsuarioCadastroModal'),
+    btnUsuarioCadastroSuccessOk: document.getElementById('btnUsuarioCadastroSuccessOk'),
+    nomeUsuario: document.getElementById('nomeUsuario'),
+    cpfUsuario: document.getElementById('cpfUsuario'),
+    emailUsuario: document.getElementById('emailUsuario'),
+    senhaUsuario: document.getElementById('senhaUsuario'),
+    cadastroForm: document.getElementById('cadastroForm'),
+    deleteFornecedorModal: document.getElementById('deleteFornecedorModal'),
+    editFornecedorModal: document.getElementById('editFornecedorModal')
+};
+
+// Função para fechar modal ao clicar fora
+function closeModalOnClickOutside(modal) {
+    window.addEventListener('click', function(event) {
+        if (event.target === modal) {
+            modal.style.display = 'none';
         }
     });
 }
 
-// Funções para página de fornecedores
-function initFornecedoresPage() {
-    const btnAddFornecedor = document.getElementById('btnAddFornecedor');
-    const editButtons = document.querySelectorAll('.btn-edit');
-    const deleteButtons = document.querySelectorAll('.btn-danger');
-    const closeEditFornecedorModal = document.getElementById('closeEditFornecedorModal');
-    const closeAddFornecedorModal = document.getElementById('closeAddFornecedorModal');
-    const btnSalvarFornecedor = document.getElementById('btnSalvarFornecedor');
-    const btnCadastrarFornecedor = document.getElementById('btnCadastrarFornecedor');
-    const btnConfirmDeleteFornecedor = document.getElementById('btnConfirmDeleteFornecedor');
-    const btnCancelDeleteFornecedor = document.getElementById('btnCancelDeleteFornecedor');
-    const btnFornecedorSuccessOk = document.getElementById('btnFornecedorSuccessOk');
-    const editFornecedorModal = document.getElementById('editFornecedorModal');
-    const addFornecedorModal = document.getElementById('addFornecedorModal');
-    const deleteFornecedorModal = document.getElementById('deleteFornecedorModal');
-    const successFornecedorModal = document.getElementById('successFornecedorModal');
-    const successFornecedorMessage = document.getElementById('successFornecedorMessage');
-
-    // Variável para armazenar o ID do fornecedor a ser excluído
-    let fornecedorToDelete = null;
-
-    if (btnAddFornecedor) {
-        btnAddFornecedor.addEventListener('click', function() {
-            addFornecedorModal.style.display = 'flex';
-        });
-    }
-
-    // Adicionar eventos aos botões de edição
-    editButtons.forEach(button => {
-        button.addEventListener('click', function() {
-            const fornecedorId = this.dataset.id;
-            // Em um sistema real, buscaríamos as informações do fornecedor no servidor
-            // Simulando preenchimento dos campos de edição
-            document.getElementById('editRazaoSocial').value = 'Fornecedor ' + fornecedorId;
-            document.getElementById('editTelefone').value = '(00) 0000-0000';
-            document.getElementById('editRepresentante').value = 'XXXXX XXXXXX';
-            document.getElementById('editEndereco').value = 'XXXx XXXXXXX';
-
-            editFornecedorModal.style.display = 'flex';
-        });
-    });
-
-    // Adicionar eventos aos botões de exclusão
-    deleteButtons.forEach(button => {
-        button.addEventListener('click', function() {
-            fornecedorToDelete = this.dataset.id;
-            deleteFornecedorModal.style.display = 'flex';
-        });
-    });
-
-    // Fechar modal de edição
-    if (closeEditFornecedorModal) {
-        closeEditFornecedorModal.addEventListener('click', function() {
-            editFornecedorModal.style.display = 'none';
-        });
-    }
-
-    // Fechar modal de adição
-    if (closeAddFornecedorModal) {
-        closeAddFornecedorModal.addEventListener('click', function() {
-            addFornecedorModal.style.display = 'none';
-        });
-    }
-
-    // Salvar edição
-    if (btnSalvarFornecedor) {
-        btnSalvarFornecedor.addEventListener('click', function() {
-            // Em um sistema real, enviaríamos os dados para o servidor
-            editFornecedorModal.style.display = 'none';
-            successFornecedorMessage.textContent = 'Fornecedor editado com sucesso!';
-            successFornecedorModal.style.display = 'flex';
-        });
-    }
-
-    // Cadastrar novo fornecedor
-    if (btnCadastrarFornecedor) {
-        btnCadastrarFornecedor.addEventListener('click', function() {
-            // Em um sistema real, enviaríamos os dados para o servidor
-            addFornecedorModal.style.display = 'none';
-            successFornecedorMessage.textContent = 'Fornecedor cadastrado com sucesso!';
-            successFornecedorModal.style.display = 'flex';
-        });
-    }
-
-    // Confirmar exclusão
-    if (btnConfirmDeleteFornecedor) {
-        btnConfirmDeleteFornecedor.addEventListener('click', function() {
-            // Em um sistema real, enviaríamos a solicitação de exclusão para o servidor
-            deleteFornecedorModal.style.display = 'none';
-            successFornecedorMessage.textContent = 'Exclusão realizada com sucesso!';
-            successFornecedorModal.style.display = 'flex';
-        });
-    }
-
-    // Cancelar exclusão
-    if (btnCancelDeleteFornecedor) {
-        btnCancelDeleteFornecedor.addEventListener('click', function() {
-            deleteFornecedorModal.style.display = 'none';
-            fornecedorToDelete = null;
-        });
-    }
-
-    // Fechar modal de sucesso
-    if (btnFornecedorSuccessOk) {
-        btnFornecedorSuccessOk.addEventListener('click', function() {
-            successFornecedorModal.style.display = 'none';
-            // Em um sistema real, recarregaríamos os dados ou redirecionaríamos
-        });
-    }
-
-    // Fechar modais quando clicar fora deles
-    window.addEventListener('click', function(event) {
-        if (event.target === editFornecedorModal) {
-            editFornecedorModal.style.display = 'none';
-        }
-        if (event.target === addFornecedorModal) {
-            addFornecedorModal.style.display = 'none';
-        }
-        if (event.target === deleteFornecedorModal) {
-            deleteFornecedorModal.style.display = 'none';
-            fornecedorToDelete = null;
-        }
-        if (event.target === successFornecedorModal) {
-            successFornecedorModal.style.display = 'none';
-        }
-    });
-
-    // Permitir fechar modais com a tecla Esc
+// Função para fechar modal com tecla Esc
+function closeModalOnEsc(modal) {
     document.addEventListener('keydown', function(event) {
         if (event.key === 'Escape') {
-            if (editFornecedorModal) editFornecedorModal.style.display = 'none';
-            if (addFornecedorModal) addFornecedorModal.style.display = 'none';
-            if (deleteFornecedorModal) {
-                deleteFornecedorModal.style.display = 'none';
-                fornecedorToDelete = null;
-            }
-            if (successFornecedorModal) successFornecedorModal.style.display = 'none';
+            modal.style.display = 'none';
         }
     });
 }
 
-// Funções para página de cadastro
-function initCadastroPage() {
-    const btnSalvarCadastro = document.getElementById('btnSalvarCadastro');
-    const successCadastroModal = document.getElementById('successCadastroModal');
-    const btnCadastroSuccessOk = document.getElementById('btnCadastroSuccessOk');
-
-    if (btnSalvarCadastro) {
-        btnSalvarCadastro.addEventListener('click', function() {
-            // Validação simples
-            const razaoSocial = document.getElementById('cadastroRazaoSocial').value.trim();
-            const cnpj = document.getElementById('cadastroCNPJ').value.trim();
-            const telefone = document.getElementById('cadastroTelefone').value.trim();
-
-            if (!razaoSocial || !cnpj || !telefone) {
-                alert('Por favor, preencha todos os campos obrigatórios.');
-                return;
-            }
-
-            // Em um sistema real, enviaríamos os dados para o servidor
-            successCadastroModal.style.display = 'flex';
-        });
-    }
-
-    if (btnCadastroSuccessOk) {
-        btnCadastroSuccessOk.addEventListener('click', function() {
-            successCadastroModal.style.display = 'none';
-            // Limpar formulário
-            document.querySelectorAll('input').forEach(input => {
-                input.value = '';
-            });
-        });
-    }
-
-    // Fechar modais quando clicar fora deles
-    window.addEventListener('click', function(event) {
-        if (event.target === successCadastroModal) {
-            successCadastroModal.style.display = 'none';
-        }
-    });
-
-    // Permitir fechar modais com a tecla Esc
-    document.addEventListener('keydown', function(event) {
-        if (event.key === 'Escape') {
-            if (successCadastroModal) successCadastroModal.style.display = 'none';
-        }
-    });
+// Função para limpar inputs de um formulário
+function clearFormInputs(form) {
+    form.querySelectorAll('input').forEach(input => input.value = '');
 }
 
-// Funções para página de cadastro de produto
-function initCadastroProdutoPage() {
-    const btnSalvarProduto = document.getElementById('btnSalvarProduto');
-    const successProdutoModal = document.getElementById('successProdutoModal');
-    const btnProdutoSuccessOk = document.getElementById('btnProdutoSuccessOk');
+// Adicionando eventos nos modais
+closeModalOnClickOutside(elements.successUsuarioCadastroModal);
+closeModalOnClickOutside(elements.deleteFornecedorModal);
+closeModalOnClickOutside(elements.editFornecedorModal);
 
-    if (btnSalvarProduto) {
-        btnSalvarProduto.addEventListener('click', function() {
-            // Validação simples
-            const descricao = document.getElementById('descricao').value.trim();
-            const codigoBarraProduto = document.getElementById('codigoBarraProduto').value.trim();
-            const quantidadeProduto = document.getElementById('quantidadeProduto').value.trim();
+closeModalOnEsc(elements.successUsuarioCadastroModal);
+closeModalOnEsc(elements.deleteFornecedorModal);
+closeModalOnEsc(elements.editFornecedorModal);
 
-            if (!descricao || !codigoBarraProduto || !quantidadeProduto) {
-                alert('Por favor, preencha todos os campos obrigatórios.');
-                return;
-            }
+// Evento de sucesso ao cadastrar usuário
+elements.btnUsuarioCadastroSuccessOk.addEventListener('click', function() {
+    elements.successUsuarioCadastroModal.style.display = 'none';
+    clearFormInputs(elements.cadastroForm);
+    document.querySelector('input[name="statusCadastroUsuario"][value="ativo"]').checked = true;
+});
 
-            // Em um sistema real, enviaríamos os dados para o servidor
-            successProdutoModal.style.display = 'flex';
-        });
+// Delegação de eventos para editar e excluir fornecedores
+document.addEventListener('click', function(event) {
+    if (event.target.classList.contains('btn-edit')) {
+        const fornecedorId = event.target.dataset.id;
+        document.getElementById('editRazaoSocial').value = 'Fornecedor ' + fornecedorId;
+        elements.editFornecedorModal.style.display = 'flex';
     }
 
-    if (btnProdutoSuccessOk) {
-        btnProdutoSuccessOk.addEventListener('click', function() {
-            successProdutoModal.style.display = 'none';
-            // Limpar formulário
-            document.querySelectorAll('input').forEach(input => {
-                input.value = '';
-            });
-        });
+    if (event.target.classList.contains('btn-danger')) {
+        fornecedorToDelete = event.target.dataset.id;
+        elements.deleteFornecedorModal.style.display = 'flex';
     }
+});
 
-    // Fechar modais quando clicar fora deles
-    window.addEventListener('click', function(event) {
-        if (event.target === successProdutoModal) {
-            successProdutoModal.style.display = 'none';
-        }
-    });
-
-    // Permitir fechar modais com a tecla Esc
-    document.addEventListener('keydown', function(event) {
-        if (event.key === 'Escape') {
-            if (successProdutoModal) successProdutoModal.style.display = 'none';
-        }
-    });
+// Manter submenus expandidos ao clicar em um item
+function setActiveAndNavigate(page, element, menuId) {
+    document.querySelectorAll('.sidebar-subitem').forEach(item => item.classList.remove('active'));
+    element.classList.add('active');
+    localStorage.setItem('openMenu', menuId);
+    window.location.href = page;
 }
 
-// Funções para página de cadastro de usuário
-function initCadastroUsuarioPage() {
-    const btnSalvarUsuarioCadastro = document.getElementById('btnSalvarUsuarioCadastro');
-    const successUsuarioCadastroModal = document.getElementById('successUsuarioCadastroModal');
-    const btnUsuarioCadastroSuccessOk = document.getElementById('btnUsuarioCadastroSuccessOk');
-
-    if (btnSalvarUsuarioCadastro) {
-        btnSalvarUsuarioCadastro.addEventListener('click', function() {
-            // Validação simples
-            const nomeUsuario = document.getElementById('nomeUsuario').value.trim();
-            const cpfUsuario = document.getElementById('cpfUsuario').value.trim();
-            const emailUsuario = document.getElementById('emailUsuario').value.trim();
-            const senhaUsuario = document.getElementById('senhaUsuario').value.trim();
-
-            if (!nomeUsuario || !cpfUsuario || !emailUsuario || !senhaUsuario) {
-                alert('Por favor, preencha todos os campos obrigatórios.');
-                return;
-            }
-
-            // Em um sistema real, enviaríamos os dados para o servidor
-            successUsuarioCadastroModal.style.display = 'flex';
-        });
-    }
-
-    if (btnUsuarioCadastroSuccessOk) {
-        btnUsuarioCadastroSuccessOk.addEventListener('click', function() {
-            successUsuarioCadastroModal.style.display = 'none';
-            // Limpar formulário
-            document.querySelectorAll('input').forEach(input => {
-                input.value = '';
-            });
-            // Redefinir radio buttons para 'ativo'
-            document.querySelector('input[name="statusCadastroUsuario"][value="ativo"]').checked = true;
-        });
-    }
-
-    // Fechar modais quando clicar fora deles
-    window.addEventListener('click', function(event) {
-        if (event.target === successUsuarioCadastroModal) {
-            successUsuarioCadastroModal.style.display = 'none';
-        }
-    });
-
-    // Permitir fechar modais com a tecla Esc
-    document.addEventListener('keydown', function(event) {
-        if (event.key === 'Escape') {
-            if (successUsuarioCadastroModal) successUsuarioCadastroModal.style.display = 'none';
-        }
-    });
-}
-
-// Funções utilitárias para manipulação de elementos da sidebar
+// Expandir submenu ao carregar a página
 document.addEventListener('DOMContentLoaded', function() {
-    // Expandir/colapsar submenus na sidebar
-    const sidebarItems = document.querySelectorAll('.sidebar-item');
-
-    sidebarItems.forEach(item => {
-        item.addEventListener('click', function() {
-            const nextElement = this.nextElementSibling;
-
-            if (nextElement && nextElement.classList.contains('sidebar-subnav')) {
-                if (nextElement.style.display === 'block') {
-                    nextElement.style.display = 'none';
-                    this.querySelector('.dropdown-icon').textContent = '▼';
-                } else {
-                    // Esconder todos os outros submenus
-                    document.querySelectorAll('.sidebar-subnav').forEach(subnav => {
-                        subnav.style.display = 'none';
-                    });
-                    document.querySelectorAll('.dropdown-icon').forEach(icon => {
-                        icon.textContent = '▼';
-                    });
-
-                    nextElement.style.display = 'block';
-                    this.querySelector('.dropdown-icon').textContent = '▲';
-                }
-            }
-        });
-    });
-
-    // Mostrar submenus para item ativo
-    const activeItems = document.querySelectorAll('.sidebar-item.active');
-    activeItems.forEach(item => {
-        const nextElement = item.nextElementSibling;
-        if (nextElement && nextElement.classList.contains('sidebar-subnav')) {
-            nextElement.style.display = 'block';
-            item.querySelector('.dropdown-icon').textContent = '▲';
+    let savedMenu = localStorage.getItem('openMenu');
+    if (savedMenu) {
+        let menu = document.getElementById(savedMenu);
+        if (menu) {
+            menu.style.display = 'block';
+            menu.classList.add('open');
         }
-    });
-
-    // Logout
-    const logoutIcon = document.querySelector('.logout-icon');
-    if (logoutIcon) {
-        logoutIcon.addEventListener('click', function() {
-            if (confirm('Deseja realmente sair do sistema?')) {
-                window.location.href = 'index.html';
-            }
-        });
     }
 });
