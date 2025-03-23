@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sistema de Estoque - Recuperação de Senha</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+    <div class="container recuperar-page">
+        <header class="header recuperar-header">
+        </header>
+
+        <div class="return-container">
+            <a href="index.html" class="return-link">
+                <span class="arrow-icon">←</span> Retornar para tela de login
+            </a>
+        </div>
+
+        <main class="main-content">
+            <div class="recuperar-container">
+               
+                <h1 class="system-title">RECUPERAÇÃO DE SENHA</h1>
+
+                <div class="recuperar-form">
+                    <div class="form-group">
+                        <label for="cpf">Digite seu CPF</label>
+                        <input type="text" id="cpf">
+                    </div>
+                </div>
+                <div class="container-botoes">
+                    <button class="btn btn-confirmar" id="btnConfirmar">Confirmar</button>
+                </div>
+
+            </div>
+        </main>
+
+        <footer class="footer recuperar-footer">
+            <div class="sac-icon">SAC</div>
+        </footer>
+    </div>
+
+    <!-- Modal de confirmação -->
+    <div class="modal" id="confirmModal">
+        <div class="modal-content">
+            <h2>Nova senha enviada para e-mail cadastrado.</h2>
+            <br>
+            <button class="btn btn-confirmar" id="btnReturn">Retornar para tela de login</button>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+
+</html>
