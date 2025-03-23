@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sistema de Estoque - Reposição</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <script src="script.js" defer></script>
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            // Pega os parâmetros 'produto', 'codigoBarra' e 'deposito' da URL
+            const urlParams = new URLSearchParams(window.location.search);
+            const produtoNome = urlParams.get("produto");
+            const codigoBarra = urlParams.get("codigoBarra");
+            const deposito = urlParams.get("deposito");
+
+            let produtos = JSON.parse(localStorage.getItem("produtos")) || [];
+            let produtoIndex = produtos.findIndex(p => p.nome === produtoNome);
+
+            // Se houver um produto na URL, preenche os campos automaticamente
+            if (produtoNome) {
+                document.getElementById("produto").value = produtoNome;
+            }
+            if (codigoBarra) {
+                document.getElementById("codigoBarra").value = codigoBarra;
+            }
+            if (deposito) {
+                document.getElementById("deposito").value = deposito;
+            }
+            if (produtoIndex !== -1) {
+                document.getElementById("quantidade").value = produtos[produtoIndex].quantidade;
+            }
+
+            // Evento de finalização da reposição
+            document.getElementById("btnFinalizar").addEventListener("click", function () {
+                const produto = document.getElementById("produto").value;
+                const codigoBarra = document.getElementById("codigoBarra").value;
+                const dataRecebimento = document.getElementById("dataRecebimento").value;
+                const dataSaida = document.getElementById("dataSaida").value;
+                const deposito = document.getElementById("deposito").value;
+                const quantidadeAdicionada = document.getElementById("quantidade").value;
+
+                if (!produto || !quantidadeAdicionada) {
+                    alert("Preencha os campos obrigatórios.");
+                    return;
+                }
+
+                // Atualiza a quantidade no estoque (localStorage)
+                if (produtoIndex !== -1) {
+                    produtos[produtoIndex].quantidade = parseInt(produtos[produtoIndex].quantidade) + parseInt(quantidadeAdicionada);
+                    localStorage.setItem("produtos", JSON.stringify(produtos));
+                }
+
+                // Exibir modal de sucesso
+                document.getElementById("successModal").style.display = "flex";
+            });
+
+            // Fecha o modal e volta para a tela de reposição
+            document.getElementById("btnSuccessOk").addEventListener("click", function () {
+                document.getElementById("successModal").style.display = "none";
+                window.location.href = "reposicao.html";
+            });
+        });
+    </script>
+    <div class="container">
+        <div id="menu-container"></div> 
+        <div class="content">
+            <div class="content-header">
+                <h1>Reposição de Estoque</h1>
+                <a href="estoque.html" class="link-back">Ir para Estoque →</a>
+            </div>
+
+            <div class="form-container">
+                <div class="form-group">
+                    <label for="produto">Produto</label>
+                    <input type="text" id="produto" readonly>
+                </div>
+                
+                <div class="form-group">
+                    <label for="codigoBarra">Código de barra</label>
+                    <input type="text" id="codigoBarra" readonly>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="dataRecebimento">Data de recebimento</label>
+                        <input type="date" id="dataRecebimento">
+                    </div>
+                    <div class="form-group">
+                        <label for="dataSaida">Data de saída</label>
+                        <input type="date" id="dataSaida">
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <label for="deposito">Depósito</label>
+                    <input type="text" id="deposito" readonly>
+                </div>
+                
+                <div class="form-group">
+                    <label for="quantidade">Quantidade em estoque</label>
+                    <input type="number" id="quantidade">
+                </div>
+                
+                <div class="form-buttons">
+                    <button class="btn btn-finalizar" id="btnFinalizar">Finalizar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal de sucesso -->
+    <div class="modal" id="successModal">
+        <div class="modal-content">
+            <div class="success-icon"></div>
+            <h2>Reposição realizada com sucesso!</h2>
+            <br>
+            <button class="btn btn-confirmar" id="btnSuccessOk">Ok</button>
+        </div>
+    </div>
+</body>
+</html>
