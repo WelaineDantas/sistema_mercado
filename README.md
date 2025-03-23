@@ -49,9 +49,8 @@ Cadastros<br>
 <img src="/screenshots/registration/user/usuario.png" height="300px"/>
 <img src="/screenshots/registration/user/sucessoUsuario.png" height="300px"/>
 
-
+Disciplina: Desenvolvimento para Web
 Docente: Prof. Dr. Ricardo Ferreira Vilela
-
 Criado por:
 DARLAN ALMEIDA BARROSO<br>
 FRANCISCO JEFERSON DA SILVA DANTAS<br>
