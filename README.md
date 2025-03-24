@@ -3,7 +3,12 @@
 Atividade como requisito parcial para aprovação na disciplina de Desenvolvimento para Web, 
 do curso de Análise e Desenvolvimento de Sistemas, da Universidade Federal do Cariri.
 
+
 Com intuito de atender as boas práticas de desenvolvimento de software, o presente projeto de Sistema de Estoque foi subdividido arquivos do tipo: md (README), html (index, menu, recuperação de senha, cadastro (fornecedor, produto, usuário), estoque, fornecedores, reposição), css e js.
+
+Para logar entrar com:
+E-mail: adm@adm.com
+Senha: admin123
 
 # Brand guide - Manual de Identidade Visual:
 <img src="/screenshots/manualIdentidadeVisual.png" height="300px"/>
