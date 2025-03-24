@@ -1,0 +1,39 @@
+<div class="sidebar">
+    <div class="sidebar-header">
+        <h2>SISTEMA DE<br>ESTOQUE</h2>
+    </div>
+    <nav class="sidebar-nav">
+        <div class="sidebar-item" onclick="toggleSubMenu('submenu-estoque')">
+            <div class="sidebar-icon icon-estoque"></div>
+            <span>Estoque</span>
+            <span class="dropdown-icon">▼</span>
+        </div>
+        <div class="sidebar-subnav" id="submenu-estoque">
+            <div class="sidebar-subitem" onclick="setActiveAndNavigate('estoque.html', this, 'submenu-estoque')">Produtos</div>
+            <div class="sidebar-subitem" onclick="setActiveAndNavigate('reposicao.html', this, 'submenu-estoque')">Reposição</div>
+        </div>
+        <div class="sidebar-item" onclick="setActiveMenu('fornecedores.html', this)">
+            <div class="sidebar-icon icon-fornecedores"></div>
+            <span>Fornecedores</span>
+            
+        </div>
+        <div class="sidebar-item" onclick="setActiveMenu('usuarios.html', this)">
+            <div class="sidebar-icon icon-usuarios"></div>
+            <span>Usuários</span>
+        </div>
+        <div class="sidebar-item" onclick="toggleSubMenu('submenu-cadastros')">
+            <div class="sidebar-icon icon-cadastro"></div>
+            <span>Cadastros</span>
+            <span class="dropdown-icon" id="dropdown-arrow">▼</span>
+        </div>
+        <div class="sidebar-subnav" id="submenu-cadastros">
+            <div class="sidebar-subitem" onclick="setActiveAndNavigate('cadastro-fornecedor.html', this, 'submenu-cadastros')">Fornecedor</div>
+            <div class="sidebar-subitem" onclick="setActiveAndNavigate('cadastro-produto.html', this, 'submenu-cadastros')">Produto</div>
+            <div class="sidebar-subitem" onclick="setActiveAndNavigate('cadastro-usuario.html', this, 'submenu-cadastros')">Usuário</div>
+        </div>
+    </nav>
+    <div class="sidebar-footer">
+        <div>Oi, Leonardo</div>
+        <div class="logout-icon" onclick="navigateTo('index.html')"></div>
+    </div>
+</div>

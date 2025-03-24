@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sistema de Estoque - Cadastro de Usuário</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <script src="script.js" defer></script>
+
+    <div class="container">
+        <div id="menu-container"></div>   
+
+        <div class="content">
+            <div class="content-header">
+                <h1>Cadastrar novo Usuário</h1>
+                <a href="usuarios.html" class="link-back">Ir para Usuários →</a>
+            </div>
+
+            <form id="cadastroUsuarioForm">
+                <div class="form-container">
+                    <div class="form-group">
+                        <label for="nomeUsuario">Nome</label>
+                        <input type="text" id="nomeUsuario" required>
+                    </div>
+                    
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="cpfUsuario">CPF</label>
+                            <input type="text" id="cpfUsuario" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="emailUsuario">Email</label>
+                            <input type="email" id="emailUsuario" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="funcaoUsuario">Função</label>
+                            <input type="text" id="funcaoUsuario" required>
+                        </div>
+                    </div>
+                    
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>Status</label>
+                            <div class="radio-group">
+                                <label>
+                                    <input type="radio" name="statusCadastroUsuario" value="ativo" checked> Ativo
+                                </label>
+                                <label>
+                                    <input type="radio" name="statusCadastroUsuario" value="inativo"> Inativo
+                                </label>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="senhaUsuario">Senha</label>
+                            <input type="password" id="senhaUsuario" required>
+                        </div>
+                    </div>
+                    
+                    <div class="form-buttons">
+                        <button type="submit" class="btn btn-salvar">SALVAR</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Modal de sucesso -->
+    <div class="modal" id="successUsuarioCadastroModal">
+        <div class="modal-content">
+            <div class="success-icon"></div>
+            <h2>Cadastro realizado com sucesso!</h2>
+            <br>
+            <button class="btn btn-confirmar" id="btnUsuarioCadastroSuccessOk">Ok</button>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            const form = document.getElementById("cadastroUsuarioForm");
+            const modal = document.getElementById("successUsuarioCadastroModal");
+
+            form.addEventListener("submit", function (event) {
+                event.preventDefault(); // 🔥 Impede reload da página
+
+                let usuarios = JSON.parse(localStorage.getItem("usuarios")) || [];
+
+                let novoUsuario = {
+                    nome: document.getElementById("nomeUsuario").value.trim(),
+                    cpf: document.getElementById("cpfUsuario").value.trim(),
+                    email: document.getElementById("emailUsuario").value.trim(),
+                    funcao: document.getElementById("funcaoUsuario").value.trim(),
+                    senha: document.getElementById("senhaUsuario").value.trim(),
+                    status: document.querySelector("input[name='statusCadastroUsuario']:checked").value
+                };
+
+                // 🔥 Validação extra para CPF e Email
+                if (!/^\d{11}$/.test(novoUsuario.cpf)) {
+                    alert("O CPF deve conter exatamente 11 dígitos numéricos.");
+                    return;
+                }
+
+                if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(novoUsuario.email)) {
+                    alert("Por favor, insira um e-mail válido.");
+                    return;
+                }
+
+                usuarios.push(novoUsuario);
+                localStorage.setItem("usuarios", JSON.stringify(usuarios));
+
+                // 🔥 Exibe o modal de sucesso
+                modal.style.display = "flex";
+
+                // 🔥 Aguarda 1.5s e redireciona para a lista de usuários
+                setTimeout(() => {
+                    window.location.href = "usuarios.html";
+                }, 1500);
+            });
+
+            // Fecha o modal ao clicar no botão "Ok"
+            document.getElementById("btnUsuarioCadastroSuccessOk").addEventListener("click", function () {
+                modal.style.display = "none";
+                window.location.href = "usuarios.html";
+            });
+        });
+    </script>
+</body>
+</html>

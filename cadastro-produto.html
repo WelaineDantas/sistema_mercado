@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sistema de Estoque - Cadastro de Produto</title>
+    <link rel="stylesheet" href="style.css">
+    <style>
+        .modal-content {
+            text-align: center;
+        }
+        .btn-confirmar {
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<script src="script.js"></script>
+<body>
+    <div class="container">
+        <div id="menu-container"></div>
+        <div class="content">
+            <div class="content-header">
+                <h1>Cadastrar novo Produto</h1>
+                <a href="estoque.html" class="link-back">Ir para Estoque →</a>
+            </div>
+
+            <div class="form-container">
+                <div class="form-group">
+                    <label for="descricao">Descrição</label>
+                    <input type="text" id="descricao">
+                </div>
+                
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="codigoBarraProduto">Código de barra</label>
+                        <input type="text" id="codigoBarraProduto">
+                    </div>
+                    <div class="form-group">
+                        <label for="fornecedorProduto">Fornecedor</label>
+                        <input type="text" id="fornecedorProduto">
+                    </div>
+                    <div class="form-group">
+                        <label for="validadeProduto">Validade</label>
+                        <input type="date" id="validadeProduto">
+                    </div>
+                </div>
+                
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="localProduto">Local</label>
+                        <input type="text" id="localProduto">
+                    </div>
+                    <div class="form-group">
+                        <label for="precoCompra">Preço de compra</label>
+                        <input type="number" id="precoCompra">
+                    </div>
+                    <div class="form-group">
+                        <label for="precoVenda">Preço de venda</label>
+                        <input type="number" id="precoVenda">
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <label for="quantidadeProduto">Quantidade</label>
+                    <input type="number" id="quantidadeProduto">
+                </div>
+                
+                <div class="form-buttons">
+                    <button class="btn btn-salvar" id="btnSalvarProduto">SALVAR</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal de sucesso -->
+    <div class="modal" id="successProdutoModal">
+        <div class="modal-content">
+            <div class="success-icon"></div>
+            <h2>Cadastro realizado com sucesso!</h2>
+            <br>
+            <button class="btn btn-confirmar" id="btnProdutoSuccessOk">Ok</button>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>

@@ -1,7 +1,10 @@
-# Entregável Parcial 1 (EP1) - sistema_mercado
+# Projeto Web- Sistema de Estoque de Supermercado
 
-EP1 como requisito parcial para aprovação na disciplina de Projeto Integrado 3, 
+Atividade como requisito parcial para aprovação na disciplina de Desenvolvimento para Web, 
 do curso de Análise e Desenvolvimento de Sistemas, da Universidade Federal do Cariri.
+
+
+Com intuito de atender as boas práticas de desenvolvimento de software, o presente projeto de Sistema de Estoque foi subdividido arquivos do tipo: md (README), html (index, menu, recuperação de senha, cadastro (fornecedor, produto, usuário), estoque, fornecedores, reposição), css e js.
 
 Para logar entrar com:
 E-mail: adm@adm.com
@@ -51,16 +54,13 @@ Cadastros<br>
 <img src="/screenshots/registration/user/usuario.png" height="300px"/>
 <img src="/screenshots/registration/user/sucessoUsuario.png" height="300px"/>
 
-
-Docente: Prof. Dr. Allysson Allex de Paula Araújo
-
-
+Disciplina: Desenvolvimento para Web
+Docente: Prof. Dr. Ricardo Ferreira Vilela
 Criado por:
 DARLAN ALMEIDA BARROSO<br>
 FRANCISCO JEFERSON DA SILVA DANTAS<br>
 MARIA WELAINE DANTAS ANGELO<br>
 PAULO GONÇALO FARIAS GONÇALVES<br>
 
-Link para a documentação: 
-https://docs.google.com/document/d/1XnManf0GeQmoH-7xjKG8H61UVQLQfCRmYvtl8CksFHA/edit 
+
 
