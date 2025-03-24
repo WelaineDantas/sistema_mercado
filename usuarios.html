@@ -6,84 +6,130 @@
     <title>Sistema de Estoque - Usuários</title>
     <link rel="stylesheet" href="style.css">
 </head>
-<script src="script.js"></script>
 <body>
+    <script src="script.js" defer></script>
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            
+            let usuarios = JSON.parse(localStorage.getItem("usuarios")) || [];
+
+            function abrirModalEdicao(index) {
+                const usuario = usuarios[index];
+                document.getElementById("editNomeUsuario").value = usuario.nome;
+                document.getElementById("editCPF").value = usuario.cpf;
+                document.getElementById("editEmail").value = usuario.email;
+                document.getElementById("editFuncao").value = usuario.funcao;
+                document.getElementById("editSenha").value = usuario.senha;
+                document.getElementById("editStatus").value = usuario.status;
+
+                document.getElementById("btnSalvarUsuarioEdit").setAttribute("data-id", index);
+                document.getElementById("editUsuarioModal").style.display = "flex";
+            }
+
+            document.getElementById("btnSalvarUsuarioEdit").addEventListener("click", function () {
+                const index = this.getAttribute("data-id");
+                usuarios[index].nome = document.getElementById("editNomeUsuario").value;
+                usuarios[index].cpf = document.getElementById("editCPF").value;
+                usuarios[index].email = document.getElementById("editEmail").value;
+                usuarios[index].funcao = document.getElementById("editFuncao").value;
+                usuarios[index].senha = document.getElementById("editSenha").value;
+                usuarios[index].status = document.getElementById("editStatus").value;
+
+                localStorage.setItem("usuarios", JSON.stringify(usuarios));
+                renderizarUsuarios();
+                document.getElementById("editUsuarioModal").style.display = "none";
+                document.getElementById("successUsuarioModal").style.display = "flex";
+            });
+
+            document.getElementById("btnUsuarioSuccessOk").addEventListener("click", function () {
+                document.getElementById("successUsuarioModal").style.display = "none";
+            });
+
+            function renderizarUsuarios() {
+                const tabela = document.getElementById("usuariosLista");
+                tabela.innerHTML = `
+                    <div class="table-header">
+                        <div class="col-nome">Nome</div>
+                        <div class="col-cpf">CPF</div>
+                        <div class="col-email">Email</div>
+                        <div class="col-funcao">Função</div>
+                        <div class="col-status">Status</div>
+                        <div class="col-acoes">Ações</div>
+                    </div>
+                `;
+
+                usuarios.forEach((usuario, index) => {
+                    const row = document.createElement("div");
+                    row.classList.add("table-row");
+                    row.innerHTML = `
+                        <div class="row-main">
+                            <div class="col-nome">${usuario.nome}</div>
+                            <div class="col-cpf">${usuario.cpf}</div>
+                            <div class="col-email">${usuario.email}</div>
+                            <div class="col-funcao">${usuario.funcao}</div>
+                            <div class="col-status">${usuario.status === "ativo" ? "🟢 Ativo" : "🔴 Inativo"}</div>
+                            <div class="col-acoes">
+                                <button class="btn btn-edit" data-id="${index}">Editar</button>
+                                <button class="btn btn-danger" data-id="${index}">Excluir</button>
+                            </div>
+                        </div>
+                    `;
+                    tabela.appendChild(row);
+                });
+
+                adicionarEventos();
+            }
+
+            function adicionarEventos() {
+                document.querySelectorAll(".btn-edit").forEach(button => {
+                    button.addEventListener("click", function () {
+                        let index = this.getAttribute("data-id");
+                        abrirModalEdicao(index);
+                    });
+                });
+
+                document.querySelectorAll(".btn-danger").forEach(button => {
+                    button.addEventListener("click", function () {
+                        let index = this.getAttribute("data-id");
+                        abrirModalExclusao(index);
+                    });
+                });
+            }
+
+            function abrirModalExclusao(index) {
+                document.getElementById("btnConfirmDeleteUsuario").setAttribute("data-id", index);
+                document.getElementById("deleteUsuarioModal").style.display = "flex";
+            }
+
+            document.getElementById("btnConfirmDeleteUsuario").addEventListener("click", function () {
+                let index = this.getAttribute("data-id");
+                usuarios.splice(index, 1);
+                localStorage.setItem("usuarios", JSON.stringify(usuarios));
+                renderizarUsuarios();
+                document.getElementById("deleteUsuarioModal").style.display = "none";
+            });
+
+            document.getElementById("btnCancelDeleteUsuario").addEventListener("click", function () {
+                document.getElementById("deleteUsuarioModal").style.display = "none";
+            });
+
+            document.getElementById("btnAddUsuario").addEventListener("click", function () {
+                window.location.href = "cadastro-usuario.html";
+            });
+
+            renderizarUsuarios();
+        });
+    </script>
+
     <div class="container">
         <div id="menu-container"></div> 
-
         <div class="content">
             <div class="content-header">
                 <h1>Usuários</h1>
                 <button class="btn btn-add" id="btnAddUsuario">+ Adicionar</button>
             </div>
-
-            <div class="content-table">
-                <div class="table-header">
-                    <div class="col-nome">Nome</div>
-                    <div class="col-id">ID</div>
-                    <div class="col-funcao">Função</div>
-                    <div class="col-acoes">Ações</div>
-                </div>
-
-                <div class="table-row">
-                    <div class="col-nome">Usuário 1</div>
-                    <div class="col-id">0001</div>
-                    <div class="col-funcao">Administrador</div>
-                    <div class="col-acoes">
-                        <button class="btn btn-danger" data-id="1">Excluir</button>
-                        <button class="btn btn-edit" data-id="1">Editar</button>
-                    </div>
-                </div>
-
-                <div class="table-row">
-                    <div class="col-nome">Usuário 2</div>
-                    <div class="col-id">0002</div>
-                    <div class="col-funcao">Estoquista</div>
-                    <div class="col-acoes">
-                        <button class="btn btn-danger" data-id="2">Excluir</button>
-                        <button class="btn btn-edit" data-id="2">Editar</button>
-                    </div>
-                </div>
-
-                <div class="table-row">
-                    <div class="col-nome">Usuário 3</div>
-                    <div class="col-id">0003</div>
-                    <div class="col-funcao">Gerente</div>
-                    <div class="col-acoes">
-                        <button class="btn btn-danger" data-id="3">Excluir</button>
-                        <button class="btn btn-edit" data-id="3">Editar</button>
-                    </div>
-                </div>
-
-                <div class="table-row">
-                    <div class="col-nome">Usuário 4</div>
-                    <div class="col-id">0004</div>
-                    <div class="col-funcao">Estoquista</div>
-                    <div class="col-acoes">
-                        <button class="btn btn-danger" data-id="4">Excluir</button>
-                        <button class="btn btn-edit" data-id="4">Editar</button>
-                    </div>
-                </div>
-
-                <div class="table-row">
-                    <div class="col-nome">Usuário 5</div>
-                    <div class="col-id">0005</div>
-                    <div class="col-funcao">Estoquista</div>
-                    <div class="col-acoes">
-                        <button class="btn btn-danger" data-id="5">Excluir</button>
-                        <button class="btn btn-edit" data-id="5">Editar</button>
-                    </div>
-                </div>
-
-                <div class="table-row">
-                    <div class="col-nome">Usuário 6</div>
-                    <div class="col-id">0006</div>
-                    <div class="col-funcao">Financeiro</div>
-                    <div class="col-acoes">
-                        <button class="btn btn-danger" data-id="6">Excluir</button>
-                        <button class="btn btn-edit" data-id="6">Editar</button>
-                    </div>
-                </div>
+            <div class="content-table" id="usuariosLista">
+                <!-- Usuários serão carregados aqui -->
             </div>
         </div>
     </div>
@@ -100,82 +146,30 @@
                     <label for="editNomeUsuario">Nome</label>
                     <input type="text" id="editNomeUsuario">
                 </div>
-                <div class="form-row">
-                    <div class="form-group">
-                        <label for="editFuncao">Função</label>
-                        <input type="text" id="editFuncao">
-                    </div>
-                    <div class="form-group">
-                        <label for="editEmail">Email</label>
-                        <input type="email" id="editEmail">
-                    </div>
-                </div>
-                <div class="form-row">
-                    <div class="form-group">
-                        <label for="editSenha">Senha</label>
-                        <input type="password" id="editSenha">
-                    </div>
-                    <div class="form-group">
-                        <label>Status</label>
-                        <div class="radio-group">
-                            <label>
-                                <input type="radio" name="status" value="ativo" checked> Ativo
-                            </label>
-                            <label>
-                                <input type="radio" name="status" value="inativo"> Inativo
-                            </label>
-                        </div>
-                    </div>
-                </div>
-                <button class="btn btn-salvar" id="btnSalvarUsuario">Salvar</button>
-            </div>
-        </div>
-    </div>
-
-    <!-- Modal de cadastro de usuário -->
-    <div class="modal" id="addUsuarioModal">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h2>Cadastrar novo Usuário</h2>
-                <button class="btn-close" id="closeAddUsuarioModal">&times;</button>
-            </div>
-            <div class="modal-body">
                 <div class="form-group">
-                    <label for="novoNomeUsuario">Nome</label>
-                    <input type="text" id="novoNomeUsuario">
+                    <label for="editCPF">CPF</label>
+                    <input type="text" id="editCPF">
                 </div>
-                <div class="form-row">
-                    <div class="form-group">
-                        <label for="novoCPF">CPF</label>
-                        <input type="text" id="novoCPF">
-                    </div>
-                    <div class="form-group">
-                        <label for="novoEmail">Email</label>
-                        <input type="email" id="novoEmail">
-                    </div>
-                    <div class="form-group">
-                        <label for="novoFuncao">Função</label>
-                        <input type="text" id="novoFuncao">
-                    </div>
+                <div class="form-group">
+                    <label for="editEmail">Email</label>
+                    <input type="email" id="editEmail">
                 </div>
-                <div class="form-row">
-                    <div class="form-group">
-                        <label>Status</label>
-                        <div class="radio-group">
-                            <label>
-                                <input type="radio" name="novoStatus" value="ativo" checked> Ativo
-                            </label>
-                            <label>
-                                <input type="radio" name="novoStatus" value="inativo"> Inativo
-                            </label>
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        <label for="novoSenha">Senha</label>
-                        <input type="password" id="novoSenha">
-                    </div>
+                <div class="form-group">
+                    <label for="editFuncao">Função</label>
+                    <input type="text" id="editFuncao">
                 </div>
-                <button class="btn btn-salvar" id="btnCadastrarUsuario">SALVAR</button>
+                <div class="form-group">
+                    <label for="editSenha">Senha</label>
+                    <input type="password" id="editSenha">
+                </div>
+                <div class="form-group">
+                    <label>Status</label>
+                    <select id="editStatus">
+                        <option value="ativo">Ativo</option>
+                        <option value="inativo">Inativo</option>
+                    </select>
+                </div>
+                <button class="btn btn-salvar" id="btnSalvarUsuarioEdit">Salvar</button>
             </div>
         </div>
     </div>
@@ -194,12 +188,11 @@
     <!-- Modal de sucesso -->
     <div class="modal" id="successUsuarioModal">
         <div class="modal-content">
-            <div class="success-icon"></div>
             <h2 id="successUsuarioMessage">Usuário editado com sucesso!</h2>
+            <br>
             <button class="btn btn-confirmar" id="btnUsuarioSuccessOk">Ok</button>
         </div>
     </div>
 
-    <script src="script.js"></script>
 </body>
 </html>

@@ -638,6 +638,30 @@ body {
     background-repeat: no-repeat;
 }
 
+.table-header, .table-row {
+    display: grid;
+    grid-template-columns: 2fr 1fr 2fr 1fr 1fr 1fr; /* Ajusta o tamanho das colunas */
+    gap: 20px; /* Espaço entre colunas */
+    padding: 10px;
+    border-bottom: 2px solid #ddd;
+    align-items: center;
+}
+
+.row-main {
+    display: grid;
+    grid-template-columns: 2fr 1fr 2fr 1fr 1fr 1fr;
+    gap: 20px;
+    padding: 10px;
+    border-bottom: 1px solid #eee;
+    align-items: center;
+}
+
+.col-nome, .col-cpf, .col-email, .col-funcao, .col-status, .col-acoes {
+    padding: 8px; /* Espaçamento interno */
+    text-align: left;
+}
+
+
 /* Responsividade */
 @media (max-width: 768px) {
     .container {
@@ -664,6 +688,7 @@ body {
         flex-direction: column;
         gap: 10px;
     }
+    
 
     .col-acoes {
         justify-content: flex-start;
@@ -672,4 +697,5 @@ body {
     .modal-content {
         width: 95%;
     }
+    
 }

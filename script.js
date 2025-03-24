@@ -23,6 +23,7 @@ document.addEventListener('DOMContentLoaded', function() {
         initEstoquePage();
     }
 
+    
     // Verifica se está na página de reposição
     if (document.getElementById('btnFinalizar')) {
         initReposicaoPage();
