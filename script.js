@@ -39,31 +39,16 @@ document.addEventListener('DOMContentLoaded', function() {
         initFornecedoresPage();
     }
 
+    // Adiciona novo fornecedor
+    document.getElementById("btnAddProduto").addEventListener("click", function () {
+   
+        window.location.href = "cadastro-produto.html";
+
+    });
+
     // Verifica se está na página de cadastro
     if (document.getElementById('btnSalvarCadastro')) {
         initCadastroPage();
-    }
-
-    // Verifica se está na página de cadastro de produto
-    if (document.getElementById('btnSalvarProduto')) {
-        document.getElementById("btnSalvarProduto").addEventListener("click", function () {
-            let descricao = document.getElementById("descricao").value;
-            let quantidade = document.getElementById("quantidadeProduto").value;
-            let local = document.getElementById("localProduto").value;
-            let precoVenda = document.getElementById("precoVenda").value;
-    
-            if (!descricao || !quantidade || !local || !precoVenda) {
-                alert("Preencha todos os campos obrigatórios!");
-                return;
-            }
-    
-            let produtos = JSON.parse(localStorage.getItem("produtos")) || [];
-            produtos.push({ nome: descricao, quantidade, local, precoVenda });
-            localStorage.setItem("produtos", JSON.stringify(produtos));
-    
-            // Redireciona para a tela de estoque
-            window.location.href = "estoque.html";
-        });
     }
 
     // Verifica se está na página de cadastro de usuário
@@ -73,11 +58,36 @@ document.addEventListener('DOMContentLoaded', function() {
 });
 
 // Adiciona novo fornecedor
-document.getElementById("btnAddFornecedor").addEventListener("click", function () {
+    document.getElementById("btnAddFornecedor").addEventListener("click", function () {
    
-    window.location.href = "cadastro-fornecedor.html";
+        window.location.href = "cadastro-fornecedor.html";
 
-});
+    });
+
+    document.getElementById("btnSalvarProduto").addEventListener("click", function () {
+        const form = document.getElementById("cadastroProdutoForm");
+        const modal = document.getElementById("successProdutoModal");
+
+        form.addEventListener("submit", function (event) {
+            let descricao = document.getElementById("descricao").value;
+            let quantidade = document.getElementById("quantidadeProduto").value;
+            let local = document.getElementById("localProduto").value;
+            let precoVenda = document.getElementById("precoVenda").value;
+
+            if (!descricao || !quantidade || !local || !precoVenda) {
+                alert("Preencha todos os campos obrigatórios!");
+                return;
+            }
+
+            let produtos = JSON.parse(localStorage.getItem("produtos")) || [];
+            produtos.push({ nome: descricao, quantidade, local, precoVenda });
+            localStorage.setItem("produtos", JSON.stringify(produtos));
+            
+            // Redireciona para a tela de estoque
+            window.location.href = "estoque.html";
+        });
+        
+    });
 
 // Funções para página de login e recuperar senha
 function initLoginAndRecoverPage() {
