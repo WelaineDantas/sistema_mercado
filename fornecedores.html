@@ -10,20 +10,23 @@
     <script src="script.js" defer></script>
     <script>
         document.addEventListener("DOMContentLoaded", function () {
-    let fornecedores = JSON.parse(localStorage.getItem("fornecedores")) || [];
+            let fornecedores = JSON.parse(localStorage.getItem("fornecedores")) || [];
 
-    function abrirModalEdicao(index) {
-    const fornecedor = fornecedores[index];
-    
-    document.getElementById("editRazaoSocial").value = fornecedor.razaoSocial;
-    document.getElementById("editEndereco").value = fornecedor.endereco;
-    document.getElementById("editTelefone").value = fornecedor.telefone;
-    document.getElementById("editRepresentante").value = fornecedor.representante;
-    document.getElementById("editStatus").value = fornecedor.status; // 🔥 Atualiza o status
-
-    document.getElementById("btnSalvarFornecedorEdit").setAttribute("data-id", index);
-    document.getElementById("editFornecedorModal").style.display = "flex"; // 🔥 Abre o modal
-}
+            function abrirModalEdicao(index) {
+            const fornecedor = fornecedores[index];
+            
+            document.getElementById("editRazaoSocial").value = fornecedor.razaoSocial;
+            document.getElementById("editEndereco").value = fornecedor.endereco;
+            document.getElementById("editTelefone").value = fornecedor.telefone;
+            document.getElementById("editRepresentante").value = fornecedor.representante;
+            document.getElementById("editStatus").value = fornecedor.status; // 🔥 Atualiza o status
+            
+            document.getElementById("btnSalvarFornecedorEdit").setAttribute("data-id", index);
+            document.getElementById("editFornecedorModal").style.display = "flex"; // 🔥 Abre o modal
+        }
+        document.getElementById("btnAddFornecedor").addEventListener("click", function () {
+                window.location.href = "cadastro-fornecedor.html";
+            });
 document.getElementById("btnSalvarFornecedorEdit").addEventListener("click", function () {
     const index = this.getAttribute("data-id");
     fornecedores[index].razaoSocial = document.getElementById("editRazaoSocial").value;
