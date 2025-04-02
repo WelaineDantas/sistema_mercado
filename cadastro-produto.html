@@ -14,6 +14,7 @@
         }
     </style>
 </head>
+<script src="script.js"></script>
 <body>
     <div class="container">
         <div id="menu-container"></div>
@@ -23,20 +24,19 @@
                 <a href="estoque.html" class="link-back">Ir para Estoque →</a>
             </div>
 
-            <form id="cadastroProdutoForm">
-                <div class="form-container">
+            <div class="form-container">
+                <div class="form-group">
+                    <label for="descricao">Descrição</label>
+                    <input type="text" id="descricao">
+                </div>
+                
+                <div class="form-row">
                     <div class="form-group">
-                        <label for="descricao">Descrição</label>
-                        <input type="text" id="descricao">
+                        <label for="codigoBarraProduto">Código de barra</label>
+                        <input type="text" id="codigoBarraProduto">
                     </div>
-                    
-                    <div class="form-row">
-                        <div class="form-group">
-                            <label for="codigoBarraProduto">Código de barra</label>
-                            <input type="text" id="codigoBarraProduto">
-                        </div>
-                        <div class="form-group">
-                            <label for="fornecedorProduto">Fornecedor</label>
+                    <div class="form-group">
+                        <label for="fornecedorProduto">Fornecedor</label>
                         <input type="text" id="fornecedorProduto">
                     </div>
                     <div class="form-group">
@@ -68,7 +68,6 @@
                 <div class="form-buttons">
                     <button class="btn btn-salvar" id="btnSalvarProduto">SALVAR</button>
                 </div>
-            </form>
             </div>
         </div>
     </div>

@@ -23,7 +23,6 @@ document.addEventListener('DOMContentLoaded', function() {
         initEstoquePage();
     }
 
-    
     // Verifica se está na página de reposição
     if (document.getElementById('btnFinalizar')) {
         initReposicaoPage();
@@ -39,16 +38,31 @@ document.addEventListener('DOMContentLoaded', function() {
         initFornecedoresPage();
     }
 
-    // Adiciona novo fornecedor
-    document.getElementById("btnAddProduto").addEventListener("click", function () {
-   
-        window.location.href = "cadastro-produto.html";
-
-    });
-
     // Verifica se está na página de cadastro
     if (document.getElementById('btnSalvarCadastro')) {
         initCadastroPage();
+    }
+
+    // Verifica se está na página de cadastro de produto
+    if (document.getElementById('btnSalvarProduto')) {
+        document.getElementById("btnSalvarProduto").addEventListener("click", function () {
+            let descricao = document.getElementById("descricao").value;
+            let quantidade = document.getElementById("quantidadeProduto").value;
+            let local = document.getElementById("localProduto").value;
+            let precoVenda = document.getElementById("precoVenda").value;
+    
+            if (!descricao || !quantidade || !local || !precoVenda) {
+                alert("Preencha todos os campos obrigatórios!");
+                return;
+            }
+    
+            let produtos = JSON.parse(localStorage.getItem("produtos")) || [];
+            produtos.push({ nome: descricao, quantidade, local, precoVenda });
+            localStorage.setItem("produtos", JSON.stringify(produtos));
+    
+            // Redireciona para a tela de estoque
+            window.location.href = "estoque.html";
+        });
     }
 
     // Verifica se está na página de cadastro de usuário
@@ -56,38 +70,6 @@ document.addEventListener('DOMContentLoaded', function() {
         initCadastroUsuarioPage();
     }
 });
-
-// Adiciona novo fornecedor
-    document.getElementById("btnAddFornecedor").addEventListener("click", function () {
-   
-        window.location.href = "cadastro-fornecedor.html";
-
-    });
-
-    document.getElementById("btnSalvarProduto").addEventListener("click", function () {
-        const form = document.getElementById("cadastroProdutoForm");
-        const modal = document.getElementById("successProdutoModal");
-
-        form.addEventListener("submit", function (event) {
-            let descricao = document.getElementById("descricao").value;
-            let quantidade = document.getElementById("quantidadeProduto").value;
-            let local = document.getElementById("localProduto").value;
-            let precoVenda = document.getElementById("precoVenda").value;
-
-            if (!descricao || !quantidade || !local || !precoVenda) {
-                alert("Preencha todos os campos obrigatórios!");
-                return;
-            }
-
-            let produtos = JSON.parse(localStorage.getItem("produtos")) || [];
-            produtos.push({ nome: descricao, quantidade, local, precoVenda });
-            localStorage.setItem("produtos", JSON.stringify(produtos));
-            
-            // Redireciona para a tela de estoque
-            window.location.href = "estoque.html";
-        });
-        
-    });
 
 // Funções para página de login e recuperar senha
 function initLoginAndRecoverPage() {
@@ -353,10 +335,6 @@ document.addEventListener("DOMContentLoaded", function () {
         document.getElementById("editPrecoVenda").value = produto.precoVenda;
         document.getElementById("btnSalvarEdit").setAttribute("data-id", index);
         document.getElementById("editModal").style.display = "flex";
-        document.getElementById("editFornecedorModal").style.display = "flex";
-        document.getElementById("btnSalvarFornecedorEdit").setAttribute("data-id", index);
-
-        
     }
 
     // Salva as edições do produto
@@ -424,8 +402,6 @@ document.addEventListener("DOMContentLoaded", function () {
             });
         });
     }
-
-    
 
     // Adiciona novo item ao estoque
     document.getElementById("btnAddItem").addEventListener("click", function () {
@@ -680,82 +656,7 @@ document.addEventListener("DOMContentLoaded", function () {
     });
 });
 
-document.addEventListener("DOMContentLoaded", function () {
-    const btnSalvar = document.getElementById("btnSalvarCadastro");
 
-    if (btnSalvar) {
-        btnSalvar.addEventListener("click", function () {
-            let fornecedores = JSON.parse(localStorage.getItem("fornecedores")) || [];
 
-            let novoFornecedor = {
-                razaoSocial: document.getElementById("cadastroRazaoSocial").value,
-                cnpj: document.getElementById("cadastroCNPJ").value,
-                telefone: document.getElementById("cadastroTelefone").value
-            };
 
-            // Verifica se os campos obrigatórios estão preenchidos
-            if (!novoFornecedor.razaoSocial || !novoFornecedor.cnpj || !novoFornecedor.telefone) {
-                alert("Preencha todos os campos antes de salvar.");
-                return;
-            }
 
-            fornecedores.push(novoFornecedor);
-            localStorage.setItem("fornecedores", JSON.stringify(fornecedores));
-
-            // Exibe modal de sucesso
-            document.getElementById("successCadastroModal").style.display = "flex";
-
-            // Aguarda e redireciona para a lista de fornecedores após 1,5s
-            setTimeout(() => {
-                window.location.href = "fornecedores.html";
-            }, 1500);
-        });
-    }
-});
-
-document.addEventListener("DOMContentLoaded", function () {
-    let fornecedores = JSON.parse(localStorage.getItem("fornecedores")) || [];
-
-    function abrirModalEdicao(index) {
-        const fornecedor = fornecedores[index];
-
-        // Preenche os campos do modal com os dados do fornecedor
-        document.getElementById("editRazaoSocial").value = fornecedor.razaoSocial;
-        document.getElementById("editCNPJ").value = fornecedor.cnpj;
-        document.getElementById("editTelefone").value = fornecedor.telefone;
-        document.getElementById("editRepresentante").value = fornecedor.representante;
-        document.getElementById("editStatus").value = fornecedor.status; // Atualiza o status
-
-        // Salva o índice do fornecedor para edição
-        document.getElementById("btnSalvarFornecedorEdit").setAttribute("data-id", index);
-        
-        // Exibe o modal
-        document.getElementById("editFornecedorModal").style.display = "flex";
-    }
-
-    function fecharModalEdicao() {
-        document.getElementById("editFornecedorModal").style.display = "none";
-    }
-
-    document.getElementById("closeEditFornecedorModal").addEventListener("click", fecharModalEdicao);
-
-    function adicionarEventos() {
-        document.querySelectorAll(".btn-edit").forEach(button => {
-            button.addEventListener("click", function () {
-                let index = this.getAttribute("data-id");
-                abrirModalEdicao(index);
-            });
-        });
-
-        document.querySelectorAll(".btn-danger").forEach(button => {
-            button.addEventListener("click", function () {
-                let index = this.getAttribute("data-id");
-                fornecedores.splice(index, 1);
-                localStorage.setItem("fornecedores", JSON.stringify(fornecedores));
-                renderizarFornecedores();
-            });
-        });
-    }
-
-    renderizarFornecedores();
-});
