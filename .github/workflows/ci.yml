@@ -1,0 +1,38 @@
+name: CI Pipeline
+
+on:
+  push:
+    branches: ["*"]
+  pull_request:
+    branches: ["*"]
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout o código
+        uses: actions/checkout@v4
+
+      - name: Validar HTML
+        uses: Cyb3r-Jak3/html5validator-action@v7
+        with:
+          root: .
+          blacklist: screenshots .github .idea
+
+      - name: Validar CSS
+        uses: estherjk/css-validator-action@v1
+        with:
+          files: '**/*.css'
+
+      - name: Validar JavaScript
+        uses: reviewdog/action-eslint@v1
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          reporter: github-pr-check
+          eslint_flags: '**/*.js'
+
+      - name: Compilar arquivos Java
+        run: |
+          find src -name "*.java" > sources.txt
+          mkdir -p out
+          javac -d out @sources.txt
