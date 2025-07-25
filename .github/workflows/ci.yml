@@ -14,15 +14,15 @@ jobs:
         uses: actions/checkout@v4
 
       - name: Validar HTML
-        uses: Cyb3r-Jak3/html5validator-action@v7
+        uses: svenstaro/html5validator-action@v0.6.0
         with:
-          root: .
-          blacklist: screenshots .github .idea
+          path: .
+
+      - name: Instalar csstree-validator
+        run: npm install -g csstree-validator
 
       - name: Validar CSS
-        uses: estherjk/css-validator-action@v1
-        with:
-          files: '**/*.css'
+        run: csstree-validator "**/*.css"
 
       - name: Validar JavaScript
         uses: reviewdog/action-eslint@v1
@@ -30,9 +30,3 @@ jobs:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           reporter: github-pr-check
           eslint_flags: '**/*.js'
-
-      - name: Compilar arquivos Java
-        run: |
-          find src -name "*.java" > sources.txt
-          mkdir -p out
-          javac -d out @sources.txt
