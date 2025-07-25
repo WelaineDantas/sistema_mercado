@@ -9,23 +9,47 @@ on:
 jobs:
   validate:
     runs-on: ubuntu-latest
+
     steps:
-      - name: Checkout o código
+      - name: Checkout do código
         uses: actions/checkout@v4
 
+      - name: Configurar Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Instalar dependências
+        run: npm install
+
+      - name: Instalar html-validate
+        run: npm install -g html-validate
+
       - name: Validar HTML
-        run: |
-          docker run --rm -v "$PWD":/workspace ghcr.io/html-validate/html-validate:latest "**/*.html"
+        run: html-validate "./**/*.html"
 
       - name: Instalar csstree-validator
         run: npm install -g csstree-validator
 
       - name: Validar CSS
-        run: csstree-validator "**/*.css"
+        run: |
+          find . -name "*.css" -print0 | xargs -0 -n1 csstree-validator
 
-      - name: Validar JavaScript
-        uses: reviewdog/action-eslint@v1
+      - name: Rodar ESLint
+        run: npm run lint:js
+
+      - name: Configurar Java
+        uses: actions/setup-java@v4
         with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-          reporter: github-pr-check
-          eslint_flags: '**/*.js'
+          distribution: temurin
+          java-version: 17
+
+      - name: Compilar arquivos Java
+        run: |
+          mkdir -p out
+          find . -name "*.java" > sources.txt
+          if [ -s sources.txt ]; then
+            javac -d out @sources.txt
+          else
+            echo "Nenhum arquivo Java encontrado"
+          fi

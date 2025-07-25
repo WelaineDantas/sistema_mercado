@@ -428,35 +428,6 @@ document.addEventListener("DOMContentLoaded", function () {
 });
 
 
-
-function setActiveAndNavigate(page, element, menuId) {
-    localStorage.setItem("openMenu", menuId);
-    localStorage.setItem('activeSubItem', element.textContent.trim()); // Salva o nome do item clicado
-
-    // Remove 'active' de todos os itens
-    document.querySelectorAll(".sidebar-subitem").forEach(item => item.classList.remove("active"));
-
-    // Adiciona 'active' apenas ao item clicado
-    element.classList.add("active");
-    
-
-
-    let menu = document.getElementById(menuId);
-    if (menu) {
-        menu.style.display = 'block';
-        menu.classList.add('open');
-
-         // Garante que o item principal (Estoque) mantenha a cor de fundo
-         let parentItem = menu.previousElementSibling;
-         if (parentItem && parentItem.classList.contains("sidebar-item")) {
-             parentItem.classList.add("open");
-         }
-    }
-
-    // Navega para a página
-    window.location.href = page;
-}
-
 // Seleção de elementos centralizada
 const elements = {
     btnSalvarUsuarioCadastro: document.getElementById('btnSalvarUsuarioCadastro'),
