@@ -1,0 +1,24 @@
+{
+  "name": "sistema_mercado",
+  "version": "1.0.0",
+  "type": "module",
+  "description": "Atividade como requisito parcial para aprovação na disciplina de Desenvolvimento para Web, \r do curso de Análise e Desenvolvimento de Sistemas, da Universidade Federal do Cariri.",
+  "main": "script.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/WelaineDantas/sistema_mercado.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/WelaineDantas/sistema_mercado/issues"
+  },
+  "homepage": "https://github.com/WelaineDantas/sistema_mercado#readme",
+  "devDependencies": {
+    "eslint": "^9.32.0"
+  }
+}
