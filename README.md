@@ -73,3 +73,6 @@ cd sistema_mercado
 
 # Instale as dependências
 npm install
+
+# Executa testes localmente
+npm run lint:js
