@@ -1,0 +1,55 @@
+name: CI Pipeline
+
+on:
+  push:
+    branches: ["*"]
+  pull_request:
+    branches: ["*"]
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout do código
+        uses: actions/checkout@v4
+
+      - name: Configurar Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Instalar dependências
+        run: npm install
+
+      - name: Instalar html-validate
+        run: npm install -g html-validate
+
+      - name: Validar HTML
+        run: html-validate "./*/.html"
+
+      - name: Instalar csstree-validator
+        run: npm install -g csstree-validator
+
+      - name: Validar CSS
+        run: |
+          find . -name "*.css" -print0 | xargs -0 -n1 csstree-validator
+
+      - name: Rodar ESLint
+        run: npm run lint:js
+
+      - name: Configurar Java
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: 17
+
+      - name: Compilar arquivos Java
+        run: |
+          mkdir -p out
+          find . -name "*.java" > sources.txt
+          if [ -s sources.txt ]; then
+            javac -d out @sources.txt
+          else
+            echo "Nenhum arquivo Java encontrado"
+          fi
